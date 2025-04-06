@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="container text-center d-flex align-items-center justify-content-center home" style="height: 100vh;">
+    <div class="row w-100 align-items-center">
+        <!-- Left Column: Text & Buttons -->
+        <div class="col-lg-6 d-flex flex-column align-items-center justify-content-center text-center mb-4 mb-lg-0">
+            <h1 class="fw-bold">Empowering Communities, Ensuring Safety.</h1>
+            <p class="lead">An emergency alert and crime reporting system for Manila residents</p>
+            <div class="d-flex gap-3">
+                <button class="btn btn-danger">Report Incident</button>
+                <button class="btn btn-primary">View Alerts</button>
+            </div>            
+        </div>
+
+        <!-- Right Column: Image -->
+        <div class="col-lg-6 d-flex justify-content-center">
+            <img src="{% static 'assets/alert.gif' %}" alt="Alert GIF" class="img-fluid w-75">
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <h1 class="display-6 danger text-start fw-bold text-danger">Emergency alerts</h1>
+    </div>
+</div>
+
+{% endblock %}

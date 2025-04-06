@@ -21,4 +21,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('safecityhub/', include('safeCityHub.urls')),  # ✅ Match the app name
+    path("accounts/", include("allauth.urls")), # new
 ]
