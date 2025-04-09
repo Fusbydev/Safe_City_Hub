@@ -4,7 +4,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from .forms import LoginForm
-from django.contrib.auth.decorators import login_required   
+from django.contrib.auth.decorators import login_required  
+ 
 
 def user_login(request):
     if request.method == 'POST':
@@ -23,6 +24,8 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'safeCity/login.html', {'form': form})
+
+
 
 def map(request):
     return render(request, 'safeCity/map.html')
@@ -46,5 +49,8 @@ def homepage(request):
 
 def alerts(request):
     return render(request, 'safeCity/alerts.html')
+
+def reports(request):
+    return render(request, 'safeCity/reports.html')
 
 # Create your views here.

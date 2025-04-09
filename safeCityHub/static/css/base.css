@@ -35,3 +35,15 @@ body {
   .civic { background-color: #fdd835; }       /* Yellow */
 
 
+button#dropdownMenuButton {
+  border-radius: 50px;
+  background-color: #EEEEEE;
+  border: none;
+  color: #6B7280;
+}
+
+.report-form {
+  background-color: #F8F9FA;
+  color: #0B0B0B;
+  border-radius: 10px;
+}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container-fluid d-flex flex-column text-center d-flex alerts" style="height: 100vh; padding-top: 100px;">
+    <div class="row">
+        <div class="col-12 text-start">
+            <p class="lead fw-bold">Emergency Alerts</p>
+        </div>
+    </div>
+    <div class="row">
+        <p class="muted text-start" style="text-indent: 2em;">Stay informed about the important news in your area</p>
+    </div>
+    <div class="row">
+        <div class="col-12 text-start">
+            <p class="lead fw-bold">Active Alerts</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-start d-flex flex-row gap-3">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter by type
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else</a>
+                </div>
+            </div>
+            
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter by location
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else</a>
+                </div>
+            </div>
+            
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort by place
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
