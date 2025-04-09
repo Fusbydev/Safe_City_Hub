@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<div class="container-fluid mt-5 pt-5 text-start">
+    <p class="fs-4 fw-bold">
+        Report Incident
+    </p>
+
+    <p class="muted text-start" style="text-indent: 2em;">Help us keep our community safe by reporting incidents
+        anonymously</p>
+        <form action="{% url 'submitReport' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container report-form">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <label for="incident-type" class="form-label">Incident Type</label>
+                                <select name="incident-type" id="incident-type" class="form-select">
+                                    <option value="crime">Crime</option>
+                                    <option value="accident">Accident</option>
+                                    <option value="civic">Civic</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="urgency-level" class="form-label">Urgency Level</label>
+                                <select name="urgency-level" id="urgency-level" class="form-select">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+    
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <label for="date" class="form-label">Date and Time</label>
+                                <input type="datetime-local" name="date" id="date" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label for="contact-number" class="form-label">Contact Number</label>
+                                <input type="tel" name="contact-number" id="contact-number" class="form-control">
+                            </div>
+                        </div>
+    
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea name="description" id="description" class="form-control" rows="4" placeholder="Enter the incident description here..."></textarea>
+                            </div>
+                        </div>
+    
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <label for="proof">Image or Video Proof</label>
+                                <input type="file" name="proof" id="proof" class="form-control">
+                            </div>
+                        </div>
+    
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="anonymous" id="anonymousCheck">
+                            <label class="form-check-label" for="anonymousCheck">
+                              Submit anonymously
+                            </label>
+                          </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <label for="location" class="form-label">Location</label>
+                                <input type="text" id="longitude" class="form-control" placeholder="Enter the incident location" name="longitude" hidden>
+                                <input type="text" id="latitude" class="form-control" placeholder="Enter the incident location" name="latitude" hidden>
+                                <input type="text" name="location" id="location" class="form-control" placeholder="Enter the incident location">
+                            </div>
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-12">
+                                <a class="btn btn-primary mb-2 loc">
+                                    Use current location    
+                                </a>
+                                <div id="map" style="height: auto; width: 100%; min-height: 300px;" class="rounded mb-2"></div>
+    
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">
+                                      Report Incident
+                                    </button>
+                                  </div>
+                                  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+</div>
+{% else %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="text-center bg-secondary p-4 rounded-5 shadow ">
+        <p class=" lead text-white">Welcome to Safe City!!</p>
+        <h1 class="fs-2 text-white">You are not logged in</h1>
+        <a class="btn btn-warning mt-3 shadow" href="{% url 'login' %}">Login here</a>
+    </div>
+</div>
+{% endif %}
+
+<script>
+
+
+
+var locBtn = document.querySelector(".loc");
+var locationInput = document.getElementById("location");
+var longitudeInput = document.getElementById("longitude");
+var latitudeInput = document.getElementById("latitude");
+
+locBtn.addEventListener("click", function() {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+
+        latitudeInput.value = lat;
+        longitudeInput.value = lng;
+        
+        // Create a URL for the Nominatim reverse geocoding API
+        var geocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
+
+        // Fetch the address using the Nominatim API
+        fetch(geocodeUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    locationInput.value = "Address not found.";
+                } else {
+                    // Get the formatted address from the response
+                    var address = data.display_name;
+
+                    // Set the address to the input field
+                    locationInput.value = address;
+                }
+
+                // Initialize the map with the user's coordinates
+                initializeMap(lat, lng);
+            })
+            .catch(error => {
+                console.error("Error fetching address:", error);
+                locationInput.value = "Error retrieving address.";
+            });
+    });
+});
+
+function initializeMap(userLat, userLng) {
+    // Initialize the map
+    var map = L.map('map').setView([userLat, userLng], 13);
+
+    // Add Esri Satellite Tiles
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri'
+    }).addTo(map);
+
+    // Place a marker at the user's location
+    L.marker([userLat, userLng], {
+        icon: L.icon({
+            iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34]
+        })  
+    }).addTo(map)
+        .bindPopup("An Incident happened here")
+        .openPopup();
+
+    // Center the map on the user's location
+    map.setView([userLat, userLng], 14);
+}
+
+// Ensure the map initialization code is triggered when the page loads
+document.addEventListener("DOMContentLoaded", function() {
+});
+
+</script>
+{% endblock %}

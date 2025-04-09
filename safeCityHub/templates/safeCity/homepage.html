@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="container text-center d-flex align-items-center justify-content-center home" style="height: 100vh;">
+    <div class="row w-100 align-items-center">
+        <!-- Left Column: Text & Buttons -->
+        <div class="col-lg-6 d-flex flex-column align-items-center justify-content-center text-center mb-4 mb-lg-0">
+            <h1 class="fw-bold">Empowering Communities, Ensuring Safety.</h1>
+            <p class="lead">An emergency alert and crime reporting system for Manila residents</p>
+            <div class="d-flex gap-3">
+                <a class="btn btn-danger" href="{% url 'reports' %}">Report Incident</a>
+                <a class="btn btn-primary" href="{% url 'alerts' %}">View Alerts</a>
+            </div>            
+        </div>
+
+        <!-- Right Column: Image -->
+        <div class="col-lg-6 d-flex justify-content-center">
+            <img src="{% static 'assets/alert.gif' %}" alt="Alert GIF" class="img-fluid w-75">
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <h1 class="display-6 text-start fw-bold text-danger">All Emergency Alerts</h1>
+    </div>
+
+    {% for emergency in all_emergencies %}
+    <div class="row text-start">
+        <div class="col-12">
+            {% if emergency.incident_type == 'crime' %}
+                <p class="p-2 bg-danger rounded mb-2"><strong>Crime Alert:</strong> {{ emergency.description }}</p>
+            {% elif emergency.incident_type == 'accident' %}
+                <p class="p-2 bg-warning rounded mb-2"><strong>Accident Alert:</strong> {{ emergency.description }}</p>
+            {% elif emergency.incident_type == 'civic' %}
+                <p class="p-2 bg-warning rounded mb-2"><strong>Civic Alert:</strong> {{ emergency.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% empty %}
+    <div class="row text-start">
+        <div class="col-12">
+            <p>No emergencies reported.</p>
+        </div>
+    </div>
+{% endfor %}
+
+</div>
+
+{% endblock %}
