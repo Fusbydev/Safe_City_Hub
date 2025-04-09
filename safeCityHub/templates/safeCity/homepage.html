@@ -9,8 +9,8 @@
             <h1 class="fw-bold">Empowering Communities, Ensuring Safety.</h1>
             <p class="lead">An emergency alert and crime reporting system for Manila residents</p>
             <div class="d-flex gap-3">
-                <button class="btn btn-danger">Report Incident</button>
-                <button class="btn btn-primary">View Alerts</button>
+                <a class="btn btn-danger" href="{% url 'reports' %}">Report Incident</a>
+                <a class="btn btn-primary" href="{% url 'alerts' %}">View Alerts</a>
             </div>            
         </div>
 
@@ -23,8 +23,29 @@
 
 <div class="container">
     <div class="row">
-        <h1 class="display-6 danger text-start fw-bold text-danger">Emergency alerts</h1>
+        <h1 class="display-6 text-start fw-bold text-danger">All Emergency Alerts</h1>
     </div>
+
+    {% for emergency in all_emergencies %}
+    <div class="row text-start">
+        <div class="col-12">
+            {% if emergency.incident_type == 'crime' %}
+                <p class="p-2 bg-danger rounded mb-2"><strong>Crime Alert:</strong> {{ emergency.description }}</p>
+            {% elif emergency.incident_type == 'accident' %}
+                <p class="p-2 bg-warning rounded mb-2"><strong>Accident Alert:</strong> {{ emergency.description }}</p>
+            {% elif emergency.incident_type == 'civic' %}
+                <p class="p-2 bg-warning rounded mb-2"><strong>Civic Alert:</strong> {{ emergency.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% empty %}
+    <div class="row text-start">
+        <div class="col-12">
+            <p>No emergencies reported.</p>
+        </div>
+    </div>
+{% endfor %}
+
 </div>
 
 {% endblock %}

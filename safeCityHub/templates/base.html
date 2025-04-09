@@ -63,10 +63,11 @@
         </div>
       </nav>
 
-    <div class="content container-fluid text-center">
+    <div class="content text-center">
         {% block content %}{% endblock %}
     </div>
 
+    {%include 'footer.html' %}
     <!-- Leaflet JS (Moved to bottom for proper loading) -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
