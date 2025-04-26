@@ -3,6 +3,8 @@
 
 body {
     font-family: 'Poppins', sans-serif;
+    background-color: #F3F4F6;
+    padding: 0;
 }
 
 .navbar-custom {
@@ -46,4 +48,60 @@ button#dropdownMenuButton {
   background-color: #F8F9FA;
   color: #0B0B0B;
   border-radius: 10px;
+}
+
+.alert-container {
+  background-color: rgb(59, 130, 246, 0.20);
+}
+
+.type-alert {
+  background-color: rgb(234, 54, 54,0.25);
+  border-left: 10px solid #EA3636;
+  padding: 1rem;
+}
+
+.profile {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+}
+
+.profile-section {
+  background-color: #FFFFFF;
+}
+
+.about {
+
+    --s: 57px; /* control the size*/
+    --c1: #3628fb;
+    --c2: #5544da;
+    --c3: #3100a3;
+    
+    --_g: 0 120deg,#0000 0;
+    background:
+      conic-gradient(             at calc(250%/3) calc(100%/3),var(--c3) var(--_g)),
+      conic-gradient(from -120deg at calc( 50%/3) calc(100%/3),var(--c2) var(--_g)),
+      conic-gradient(from  120deg at calc(100%/3) calc(250%/3),var(--c1) var(--_g)),
+      conic-gradient(from  120deg at calc(200%/3) calc(250%/3),var(--c1) var(--_g)),
+      conic-gradient(from -180deg at calc(100%/3) 50%,var(--c2)  60deg,var(--c1) var(--_g)),
+      conic-gradient(from   60deg at calc(200%/3) 50%,var(--c1)  60deg,var(--c3) var(--_g)),
+      conic-gradient(from  -60deg at 50% calc(100%/3),var(--c1) 120deg,var(--c2) 0 240deg,var(--c3) 0);
+    background-size: calc(var(--s)*sqrt(3)) var(--s);
+
+  height: auto;
+}
+
+.about-main {
+  background-color: #D9D9D9;
+}
+
+.about-main .lead {
+  color: #08225B;
+}
+
+.learn-more {
+  background-color: #C75C5C;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
 }
