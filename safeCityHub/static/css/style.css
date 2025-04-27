@@ -1,0 +1,1536 @@
+/* Common Styles */
+:root {
+    --primary: #1e3a8a;
+    --primary-light: #2b4db1;
+    --secondary: #f8f9fa;
+    --text: #333;
+    --border: #dee2e6;
+    --success: #28a745;
+    --warning: #ffc107;
+    --info: #17a2b8;
+    --pending: #6c757d;
+    --danger: #dc3545;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  body {
+    background-color: #f5f7fb;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  
+  /* Layout */
+  .container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    background-color: var(--primary);
+    color: white;
+    width: 250px;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1030;
+  }
+  
+  .sidebar-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .sidebar-header img {
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+  }
+  
+  .sidebar-header h1 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .sidebar-menu {
+    margin-top: 20px;
+  }
+  
+  .menu-item {
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: white;
+    display: block;
+  }
+  
+  .menu-item:hover {
+    background-color: var(--primary-light);
+  }
+  
+  .menu-item.active {
+    background-color: rgba(255,255,255,0.1);
+    border-left: 4px solid white;
+  }
+  
+  .menu-item i {
+    margin-right: 10px;
+  }
+  
+  /* Main Content Styles */
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    transition: all 0.3s;
+    margin-left: 250px;
+    width: calc(100% - 250px);
+  }
+  
+  .dashboard-header {
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-header h2 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  
+  /* Page header */
+  .page-header {
+    background-color: white;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+  }
+  
+  /* Stats Cards */
+  .stats-container, .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .stats-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+  
+  .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #666;
+    flex-wrap: wrap;
+  }
+  
+  .stats-card, .stat-box {
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .stats-card .number, .stat-value {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .stats-card .label, .stat-label {
+    font-size: 14px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .stats-card.active .number { color: #3b82f6; }
+  .stats-card.pending .number { color: #f59e0b; }
+  .stats-card.resolved .number { color: #10b981; }
+  .stats-card.users .number { color: #6366f1; }
+  
+  .criminal-color { color: #dc3545; }
+  .civic-color { color: #28a745; }
+  .accident-color { color: #fd7e14; }
+  
+  /* Table Styles */
+  .table-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  
+  .filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .filter-input {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-button {
+    padding: 8px 12px;
+    background-color: white;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    right: 0;
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    width: 100%;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  
+  th {
+    text-align: left;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid var(--border);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  
+  th.sortable:hover {
+    background-color: #f1f3f5;
+  }
+  
+  td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  
+  .sort-icon::after {
+    content: '↑↓';
+    opacity: 0.5;
+    margin-left: 5px;
+    font-size: 12px;
+  }
+  
+  /* Status badges */
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+    min-width: 100px;
+  }
+  
+  .status-review {
+    background-color: #fef9c3;
+    color: #854d0e;
+  }
+  
+  .status-progress {
+    background-color: #dbeafe;
+    color: #1e40af;
+  }
+  
+  .status-resolved {
+    background-color: #dcfce7;
+    color: #166534;
+  }
+  
+  /* Button styles */
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  
+  .action-button {
+    padding: 4px 8px;
+    background: none;
+    border: none;
+    color: #3b82f6;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .action-button:hover {
+    text-decoration: underline;
+  }
+  
+  .btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+    transition: background 0.3s;
+  }
+  
+  .btn-primary {
+    background-color: #1e3a8a;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #153073;
+  }
+  
+  .btn-outline {
+    background-color: transparent;
+    border: 1px solid #1e3a8a;
+    color: #1e3a8a;
+  }
+  
+  .btn-outline:hover {
+    background-color: #1e3a8a;
+    color: white;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  .btn-danger {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .btn-danger:hover {
+    background-color: #bb2d3b;
+  }
+  
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-top: 20px;
+  }
+  
+  .page-button {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    background-color: white;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .page-button.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  
+  .showing-info {
+    font-size: 14px;
+    color: #666;
+    margin-top: 20px;
+  }
+  
+  /* Form styles */
+  .form-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .report-id {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .form-group {
+    width: 100%;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  input, select, textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .status-options {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  
+  .status-option {
+    display: flex;
+    align-items: center;
+  }
+  
+  .status-option input {
+    width: auto;
+    margin-right: 0.5rem;
+  }
+  
+  /* Chart components */
+  .two-column {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+  }
+  
+  .dashboard-card {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+  
+  .card-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .chart-container {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9f9f9;
+    border: 1px dashed #ddd;
+    border-radius: 4px;
+    color: #888;
+    font-size: 14px;
+    margin: 15px 0;
+  }
+  
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    margin-right: 5px;
+  }
+  
+  .color-civic { background-color: #28a745; }
+  .color-criminal { background-color: #dc3545; }
+  .color-accident { background-color: #fd7e14; }
+  
+  /* View report specific */
+  .map-container {
+    height: 300px;
+    background-color: #e9ecef;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6c757d;
+  }
+  
+  .photos {
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+  
+  .photo {
+    width: 150px;
+    height: 150px;
+    background-color: #e9ecef;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6c757d;
+  }
+  
+  .comments-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eaeaea;
+  }
+  
+  .comment {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  /* Hamburger Menu */
+  .menu-toggle {
+    display: none;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1040;
+    border-radius: 4px;
+    font-size: 20px;
+  }
+  
+  /* Header for non-dashboard pages */
+  header {
+    background-color: var(--primary);
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-button {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+  }
+  
+  .header-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .stats-container, .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .two-column {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .sidebar {
+      left: -250px;
+      height: 100%;
+      z-index: 1030;
+    }
+    
+    .sidebar.active {
+      left: 0;
+    }
+    
+    .menu-toggle {
+      display: block;
+    }
+    
+    .main-content {
+      margin-left: 0;
+      width: 100%;
+    }
+    
+    .main-content.shifted {
+      padding-left: 0;
+    }
+    
+    .form-header, .report-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .stats-container, .stats-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .filters {
+      width: 100%;
+      flex-direction: column;
+    }
+    
+    .filter-input, .dropdown-button {
+      width: 100%;
+    }
+    
+    .dropdown {
+      width: 100%;
+    }
+    
+    .action-buttons {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .action-buttons .btn {
+      width: 100%;
+    }
+  }/* Additional styles specifically for viewreport.html */
+.detail-row {
+  display: flex;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.detail-label {
+  width: 150px;
+  font-weight: bold;
+  color: #555;
+}
+
+.detail-value {
+  flex: 1;
+  min-width: 200px;
+}
+
+.report-header h2 {
+  margin-bottom: 0.25rem;
+}
+
+.photos {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.photo {
+  width: 150px;
+  height: 150px;
+  background-color: #e9ecef;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #6c757d;
+}
+
+.comments-section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eaeaea;
+}
+
+.comment {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+  flex-wrap: wrap;
+}
+
+/* Specific styles for updatereport.html */
+.form-container {
+  max-width: 800px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  margin: 2rem auto;
+}
+
+/* Responsive adjustments for detail view and forms */
+@media (max-width: 768px) {
+  .detail-row {
+    flex-direction: column;
+  }
+  
+  .detail-label {
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+  
+  .detail-value {
+    width: 100%;
+  }
+  
+  .comment-header {
+    flex-direction: column;
+  }
+  
+  .photos {
+    justify-content: center;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .action-buttons .btn {
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+}
+
+/* Make sure containers adjust for mobile */
+.container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+}/* Admin View Specific Styles */
+.admin-view {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.admin-header {
+  background-color: #1e3a8a;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo {
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+}
+
+.header-btn {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.header-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.main-content-admin {
+  padding: 0;
+}
+
+.admin-container {
+  max-width: 1000px;
+  margin: 20px auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 30px;
+}
+
+/* Report View Styles */
+.report-title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.report-title-section h2 {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.report-id-section {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.report-details {
+  margin-bottom: 30px;
+}
+
+.detail-item {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #333;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  color: #555;
+}
+
+.report-section {
+  margin-bottom: 30px;
+}
+
+.report-section h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.location-map {
+  width: 100%;
+  border-radius: 4px;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.evidence-photos {
+  display: flex;
+  gap: 16px;
+}
+
+.evidence-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.evidence-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Update Report Form Styles */
+.update-form h2 {
+  font-size: 24px;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.admin-form {
+  margin-top: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+.form-control:focus {
+  border-color: #1e3a8a;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.1);
+}
+
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.status-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.status-option {
+  display: flex;
+  align-items: center;
+}
+
+.status-option input[type="radio"] {
+  margin-right: 8px;
+}
+
+.admin-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  border: none;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: #1e3a8a;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #172b69;
+}
+
+.btn-secondary {
+  background-color: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+  background-color: #e2e8f0;
+}
+
+/* Status badge for admin view */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-review {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+/* Responsive styles for admin views */
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 1rem;
+  }
+  
+  .admin-container {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .detail-item {
+    flex-direction: column;
+  }
+  
+  .detail-label {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+  
+  .evidence-photos {
+    flex-direction: column;
+  }
+  
+  .evidence-photo {
+    width: 100%;
+    height: auto;
+  }
+  
+  .admin-actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}/* Improved Admin Header Responsiveness */
+.admin-header {
+  background-color: #1e3a8a;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  gap: 12px; /* Add space between wrapped elements */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* Prevent logo from shrinking too much */
+}
+
+.header-logo {
+  width: 24px; /* Slightly smaller on mobile */
+  height: 24px;
+  margin-right: 8px;
+}
+
+.logo-container h1 {
+  font-size: 1.25rem; /* Smaller font size to fit better on mobile */
+  white-space: nowrap; /* Keep logo text on one line */
+}
+
+.header-btn {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  white-space: nowrap; /* Keep button text on one line */
+}
+
+/* Add specific media queries for even smaller screens */
+@media (max-width: 480px) {
+  .admin-header {
+    padding: 0.75rem 1rem;
+    justify-content: center; /* Center everything on very small screens */
+    text-align: center;
+    flex-direction: column; /* Stack elements vertically */
+  }
+  
+  .logo-container {
+    margin-bottom: 8px;
+  }
+  
+  .header-btn {
+    width: 100%; /* Full width button on very small screens */
+    text-align: center;
+  }
+}/* Stats Grid Responsive Fixes */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+/* Make stats grid 2x2 on smaller screens */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Make stats grid 1 column on very small screens */
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dashboard Filter Responsive Fixes */
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center; /* Align items vertically */
+}
+
+.filter-input {
+  flex: 1;
+  min-width: 200px; /* Prevent from becoming too narrow */
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Ensure dropdown content appears in the right position */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1030; /* Higher z-index to ensure it appears above other elements */
+  border-radius: 4px;
+  right: 0;
+}
+
+/* Admin Header Responsiveness from previous fix */
+.admin-header {
+  background-color: #1e3a8a;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  gap: 12px; /* Add space between wrapped elements */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* Prevent logo from shrinking too much */
+}
+
+.header-logo {
+  width: 24px; /* Slightly smaller on mobile */
+  height: 24px;
+  margin-right: 8px;
+}
+
+.logo-container h1 {
+  font-size: 1.25rem; /* Smaller font size to fit better on mobile */
+  white-space: nowrap; /* Keep logo text on one line */
+}
+
+.header-btn {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  white-space: nowrap; /* Keep button text on one line */
+}
+
+/* Add specific media queries for even smaller screens */
+@media (max-width: 480px) {
+  .admin-header {
+    padding: 0.75rem 1rem;
+    justify-content: center; /* Center everything on very small screens */
+    text-align: center;
+    flex-direction: column; /* Stack elements vertically */
+  }
+  
+  .logo-container {
+    margin-bottom: 8px;
+  }
+  
+  .header-btn {
+    width: 100%; /* Full width button on very small screens */
+    text-align: center;
+  }
+
+  /* Stack filters vertically on very small screens */
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-input, .dropdown, .dropdown-button {
+    width: 100%;
+  }
+}/* Dashboard alignment fixes - April 2025 update */
+.stats-container {
+  position: relative;
+  padding-bottom: 40px; /* Add space for the timestamp at bottom */
+}
+
+.last-updated {
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Table alignment and responsiveness fixes */
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+th:first-child, td:first-child {
+  padding-left: 20px;
+}
+
+th:last-child, td:last-child {
+  padding-right: 20px;
+  text-align: center;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+}
+
+/* Ensure responsive table behavior across devices */
+@media (max-width: 768px) {
+  table {
+    table-layout: auto;
+  }
+  
+  th, td {
+    padding: 10px 8px;
+  }
+}
+
+@media (max-width: 576px) {
+  .table-section {
+    padding: 15px 10px;
+  }
+}/* Dashboard Stats Layout Improvements */
+.stats-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Report Overview centered */
+.report-header div {
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Stats card grid layout */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+/* Individual stat cards */
+.stats-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Last Updated centered */
+.last-updated {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-top: 20px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .report-header div {
+    font-size: 20px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* Stats Grid Responsive Fixes */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+/* Make stats grid 2x2 on smaller screens */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Make stats grid 1 column on very small screens */
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dashboard Filter Responsive Fixes */
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center; /* Align items vertically */
+}
+
+.filter-input {
+  flex: 1;
+  min-width: 200px; /* Prevent from becoming too narrow */
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Ensure dropdown content appears in the right position */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1030; /* Higher z-index to ensure it appears above other elements */
+  border-radius: 4px;
+  right: 0;
+}
+
+/* Admin Header Responsiveness from previous fix */
+.admin-header {
+  background-color: #1e3a8a;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  gap: 12px; /* Add space between wrapped elements */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* Prevent logo from shrinking too much */
+}
+
+.header-logo {
+  width: 24px; /* Slightly smaller on mobile */
+  height: 24px;
+  margin-right: 8px;
+}
+
+.logo-container h1 {
+  font-size: 1.25rem; /* Smaller font size to fit better on mobile */
+  white-space: nowrap; /* Keep logo text on one line */
+}
+
+.header-btn {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  white-space: nowrap; /* Keep button text on one line */
+}
+
+/* Add specific media queries for even smaller screens */
+@media (max-width: 480px) {
+  .admin-header {
+    padding: 0.75rem 1rem;
+    justify-content: center; /* Center everything on very small screens */
+    text-align: center;
+    flex-direction: column; /* Stack elements vertically */
+  }
+  
+  .logo-container {
+    margin-bottom: 8px;
+  }
+  
+  .header-btn {
+    width: 100%; /* Full width button on very small screens */
+    text-align: center;
+  }
+
+  /* Stack filters vertically on very small screens */
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-input, .dropdown, .dropdown-button {
+    width: 100%;
+  }
+}

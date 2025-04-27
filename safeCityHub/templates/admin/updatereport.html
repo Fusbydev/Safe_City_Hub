@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeCity Hub - Update Report</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-view">
+  <header class="admin-header">
+    <div class="logo-container">
+      <img src="safecitylogo.png" alt="SafeCity Logo" class="header-logo">
+      <h1>SafeCity Hub</h1>
+    </div>
+    <a href="dashboard.html" class="btn header-btn">Back to Dashboard</a>
+  </header>
+  
+  <div class="main-content-admin">
+    <div class="admin-container">
+      <div class="update-form">
+        <h2>Update Report</h2>
+        <div class="report-id-section">Report id: C-2025-0412</div>
+        
+        <form class="admin-form">
+          <div class="form-group">
+            <label for="title">Report Title</label>
+            <input type="text" id="title" value="Store break-in" class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label for="type">Incident Type</label>
+            <select id="type" class="form-control">
+              <option value="criminal" selected>Criminal Activity</option>
+              <option value="civic">Civic Incident</option>
+              <option value="accident">Accident</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="date">Incident Date & Time</label>
+            <input type="datetime-local" id="date" value="2025-04-09T03:00" class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" value="Carriedo St. Quiapo" class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" class="form-control">Glass storefront was broken at approximately 3:00 AM. Security camera shows two individuals wearing masks. Cash register and several electronic items were stolen. Estimated damage is around 5,000 pesos.</textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Current Status</label>
+            <div class="status-options">
+              <div class="status-option">
+                <input type="radio" id="status-reported" name="status" value="reported">
+                <label for="status-reported">Reported</label>
+              </div>
+              <div class="status-option">
+                <input type="radio" id="status-review" name="status" value="review" checked>
+                <label for="status-review">Under Review</label>
+              </div>
+              <div class="status-option">
+                <input type="radio" id="status-progress" name="status" value="progress">
+                <label for="status-progress">In-Progress</label>
+              </div>
+              <div class="status-option">
+                <input type="radio" id="status-resolved" name="status" value="resolved">
+                <label for="status-resolved">Resolved</label>
+              </div>
+              <div class="status-option">
+                <input type="radio" id="status-declined" name="status" value="declined">
+                <label for="status-declined">Declined</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="case-note">Add a case note</label>
+            <textarea id="case-note" class="form-control"></textarea>
+          </div>
+          
+          <div class="action-buttons admin-actions">
+            <button type="button" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom JS -->
+  <script>
+    // Any additional JavaScript can be placed here
+  </script>
+</body>
+</html>

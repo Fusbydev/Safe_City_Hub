@@ -1,0 +1,144 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeCity Hub - Admin Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{%  static 'css/style.css' %}">
+</head>
+<body>
+  <div class="container-fluid p-0">
+    <button class="menu-toggle" id="menuToggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="{% static 'assets/logo_safe.png' %}" alt="Logo">
+        <h1>SafeCity Hub</h1>
+      </div>
+      <div class="sidebar-menu">
+        <a href="{%  url 'admin' %}" class="menu-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{%  url 'analytics' %}" class="menu-item"><i class="fas fa-chart-line"></i> Analytics & Report</a>
+      </div>
+    </div>
+    
+    <div class="main-content" id="mainContent">
+      <div class="dashboard-header">
+        <h2>Admin Dashboard</h2>
+      </div>
+      
+      <div class="stats-container">
+        <div class="report-header">
+          <div>Report Overview</div>
+        </div>
+      
+        <div class="stats-grid">
+          <div class="stats-card active">
+            <div class="number">10</div>
+            <div class="label">Active Incidents</div>
+          </div>
+          
+          <div class="stats-card pending">
+            <div class="number">5</div>
+            <div class="label">Pending Reports</div>
+          </div>
+          
+          <div class="stats-card resolved">
+            <div class="number">25</div>
+            <div class="label">Resolved Reports</div>
+          </div>
+          
+          <div class="stats-card users">
+            <div class="number">150</div>
+            <div class="label">Registered Users</div>
+          </div>
+        </div>
+      
+        <div class="last-updated">Last Updated: April 13, 2025 • 9:30 pm</div>
+      </div>
+      
+      <div class="table-section">
+        <div class="section-header">
+          <h3 class="section-title">Recent Submissions</h3>
+          <div class="filters">
+            <input type="text" class="filter-input" placeholder="Search submissions...">
+            <div class="dropdown">
+              <button class="dropdown-button">
+                <i class="fas fa-filter"></i>
+                All Types
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="dropdown-content">
+                <a href="#">All Types</a>
+                <a href="#">Criminal Activity</a>
+                <a href="#">Accident</a>
+                <a href="#">Civic Incident</a>
+                <a href="#">Emergency</a>
+                <a href="#">Traffic</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th class="sortable sort-icon">TYPE</th>
+                <th class="sortable sort-icon">DESCRIPTION</th>
+                <th class="sortable sort-icon">LOCATION</th>
+                <th class="sortable sort-icon">DATE</th>
+                <th class="sortable sort-icon">STATUS</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for report in reports %}
+              <tr>
+                <td>{{ report.incident_type }}</td>
+                <td>{{ report.description }}</td>
+                <td>{{ report.address }}</td>
+                <td>{{ report.date }}</td>
+                <td><span class="status-badge status-review">{{ report.status }}</span></td>
+                <td class="action-buttons">
+                  <a href="viewreport.html" class="action-button">View</a>
+                  <a href="updatereport.html" class="action-button">Update</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="showing-info">Showing 8 submissions</div>
+        
+        <div class="pagination">
+          <button class="page-button">Previous</button>
+          <button class="page-button active">1</button>
+          <button class="page-button">2</button>
+          <button class="page-button">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script>
+    // Toggle sidebar
+    document.getElementById('menuToggle').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('active');
+      document.getElementById('mainContent').classList.toggle('shifted');
+    });
+  </script>
+</body>
+</html>

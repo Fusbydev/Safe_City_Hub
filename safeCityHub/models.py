@@ -1,6 +1,6 @@
 from mongoengine import Document, ObjectIdField, StringField, DateTimeField, BooleanField, FloatField, FileField, IntField
 import datetime
-from django.contrib.auth.models import User
+
 
 class Emergencies(Document):
     user = IntField(required=True)  # store Django's User.id (int)
@@ -14,6 +14,8 @@ class Emergencies(Document):
     longitude = FloatField(default=0.0)
     latitude = FloatField(default=0.0)
     submitted_at = DateTimeField(default=datetime.datetime.utcnow)
+    address = StringField(max_length=200)
+    status = StringField(choices=[('pending', 'Pending'), ('resolved', 'Resolved'), ('under_review', 'Under Review')], default='pending')
 
     def __str__(self):
         return self.description

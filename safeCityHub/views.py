@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
-from .forms import LoginForm, emergencyForm
+from .forms import LoginForm, emergencyForm, RegisterForm
 from django.contrib.auth.decorators import login_required
 from .models import Emergencies
 from django.http import JsonResponse
@@ -13,6 +13,7 @@ from django.core.paginator import Paginator
 from bson import ObjectId
 import datetime
 from django.http import Http404
+from django.contrib import messages
 
 
 
@@ -82,6 +83,8 @@ def submitReport(request):
         latitude = request.POST.get("latitude")
         anonymous = request.POST.get("anonymous") == "on"
         proof = request.FILES.get("proof")
+        address = request.POST.get("location")
+        status = "pending"
 
         # Convert date string to datetime object
         try:
@@ -110,7 +113,9 @@ def submitReport(request):
             longitude=longitude,
             latitude=latitude,
             anonymous=anonymous,
-            proof=proof
+            proof=proof,
+            address = address,
+            status=status
         )
         submitted = True
 
@@ -171,6 +176,7 @@ def user_profile(request, user):
 
     # User's reports - query by the user reference (ensure we use ObjectId here)
     user_reports_list = Emergencies.objects.filter(user=user_obj.id).order_by('-submitted_at')
+    on_going_count = user_reports_list.filter(status='pending').count()
 
     # Pagination setup
     paginator = Paginator(user_reports_list, 5)  # Show 5 reports per page
@@ -182,7 +188,8 @@ def user_profile(request, user):
         'avatar_url': avatar_url,
         'github_username': github_username,
         'page_obj': page_obj,
-        'total_reports': total_reports
+        'total_reports': total_reports,
+        'on_going_count': on_going_count
     })
 def edit_report(request, pk):
     # logic to handle editing a report
@@ -196,6 +203,33 @@ def delete_report(request, pk):
 
     report.delete()
     return redirect('user', user=str(request.user.id))  # ensure user ID is passed as a string
+
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Account created successfully! You can now log in.')
+            return redirect('login')  # redirect to your login page
+    else:
+        form = RegisterForm()
+    return render(request, 'safeCity/register.html', {'form': form})
+
+@login_required
+def admin(request):
+
+    if not request.user.is_superuser:
+        return redirect('home')
+    
+    reports = Emergencies.objects.all()
+
+    return render(request, 'admin/dashboard.html', {'reports': reports})
+
+def analytics(request):
+    return render(request, 'admin/analytics.html')
+
 
 
 
