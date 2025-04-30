@@ -110,7 +110,7 @@
                 <td><span class="status-badge status-review">{{ report.status }}</span></td>
                 <td class="action-buttons">
                   <a href="{%url 'view_report' report.id%}" class="action-button">View</a>
-                  <a href="updatereport.html" class="action-button">Update</a>
+                  <a href="{%url 'update_report' report.id%}" class="action-button">Update</a>
                 </td>
               </tr>
               {% endfor %}

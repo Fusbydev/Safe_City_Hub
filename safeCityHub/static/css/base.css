@@ -105,3 +105,18 @@ button#dropdownMenuButton {
   padding: 10px 20px;
   text-decoration: none;
 }
+
+.status-options {
+  display: flex;
+  gap: 20px; /* Space between each option */
+  flex-wrap: wrap; /* Allow wrapping if the screen is smaller */
+}
+
+.status-option {
+  display: flex;
+  align-items: center; /* Center the radio button and label vertically */
+}
+
+.status-option input[type="radio"] {
+  margin-right: 8px; /* Space between the radio button and the label */
+}

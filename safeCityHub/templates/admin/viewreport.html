@@ -54,7 +54,7 @@
       <div class="report-view">
         <div class="report-title-section">
           <h2>{{ report.incident_type }}</h2>
-          <span class="status-badge status-review">Under review</span>
+          <span class="status-badge status-review">{{ report.status }}</span>
         </div>
         <div class="report-id-section">Report id: {{ report.id }}</div>
 
@@ -78,7 +78,7 @@
 
           <div class="detail-item">
             <div class="detail-label">Reported by:</div>
-            <div class="detail-value">{{ report.user }}</div>
+            {% if report.anonymouse == false %}{{ report.user }}{% else %}Anonymous{% endif %}
           </div>
 
           <div class="detail-item">
@@ -114,7 +114,9 @@
 
         <div class="action-buttons admin-actions">
           <button class="btn btn-secondary">Cancel</button>
-          <a href="updatereport.html" class="btn btn-primary">Update Report</a>
+          {% if user.is_superuser %}
+          <a href="{% url 'update_report' report.id %}" class="btn btn-primary">Update Report</a>
+          {% endif %}
         </div>
       </div>
     </div>

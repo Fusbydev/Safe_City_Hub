@@ -1,7 +1,6 @@
-from mongoengine import Document, StringField, DateTimeField, BooleanField, FloatField, FileField, IntField
+from mongoengine import Document, StringField, DateTimeField, BooleanField, FloatField, FileField, IntField, ListField, EmbeddedDocument
 from mongoengine.fields import GridFSProxy
 import datetime
-
 class Emergencies(Document):
     user = IntField(required=True)
     incident_type = StringField(choices=[('crime', 'Crime'), ('accident', 'Accident'), ('civic', 'Civic')], required=True)
@@ -17,6 +16,10 @@ class Emergencies(Document):
     address = StringField(max_length=200)
     status = StringField(choices=[('pending', 'Pending'), ('resolved', 'Resolved'), ('under_review', 'Under Review')], default='pending')
     ways_to_mitigate = StringField()
+    comments = ListField(
+        StringField(),
+        default=[]
+    )
 
     def __str__(self):
         return self.description
