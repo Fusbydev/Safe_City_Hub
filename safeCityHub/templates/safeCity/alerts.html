@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="container-fluid d-flex flex-column text-center d-flex alerts" style="height: 100vh; padding-top: 100px;">
+<div class="container-fluid d-flex flex-column text-center d-flex alerts" style="height: auto; padding-top: 100px;">
     <div class="row">
         <div class="col-12 text-start">
             <p class="lead fw-bold">Emergency Alerts</p>
@@ -19,18 +19,21 @@
     <div class="row">
         <div class="col-12 text-start d-flex flex-row gap-3">
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     Filter by type
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else</a>
+                    <a class="dropdown-item" href="{% url 'alerts' %}">All</a>
+                    <a class="dropdown-item" href="{% url 'alerts' %}?incident_type=civic">Civic</a>
+                    <a class="dropdown-item" href="{% url 'alerts' %}?incident_type=accident">Accident</a>
+                    <a class="dropdown-item" href="{% url 'alerts' %}?incident_type=crime">Crime</a>
                 </div>
             </div>
-            
+
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     Filter by location
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -39,9 +42,10 @@
                     <a class="dropdown-item" href="#">Something else</a>
                 </div>
             </div>
-            
+
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     Sort by place
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -51,6 +55,45 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="container mt-4 alert-container p-4 rounded shadow">
+        {% if alerts %}
+    {% for alert in alerts %}
+        {% if alert.incident_type == 'crime' %}
+        <div class="alert-content mb-2">
+            <div class="col-12 type-alert p-3 text-start">
+                <h2 class="fw-bold text-danger">Emergency: {{ alert.description }}</h2>
+                <p class="lead">{{ alert.description }}</p>
+                <p class="text-muted"><i class="fa-solid fa-location-dot"></i> {{ alert.longitude }}</p>
+                <p class="text-muted"><i class="fa-solid fa-clock"></i> {{ alert.submitted_at }}</p>
+            </div>
+        </div>
+        {% elif alert.incident_type == 'accident' %}
+        <div class="alert-content mb-2">
+            <div class="col-12 type-alert p-3 text-start">
+                <h2 class="fw-bold text-warning">Emergency: {{ alert.description }}</h2>
+                <p class="lead">{{ alert.description }}</p>
+                <p class="text-muted"><i class="fa-solid fa-location-dot"></i> {{ alert.longitude }}</p>
+                <p class="text-muted"><i class="fa-solid fa-clock"></i> {{ alert.submitted_at }}</p>
+            </div>
+        </div>
+        {% elif alert.incident_type == 'civic' %}
+        <div class="alert-content mb-2">
+            <div class="col-12 type-alert p-3 text-start">
+                <h2 class="fw-bold text-warning">Emergency: {{ alert.description }}</h2>
+                <p class="lead">{{ alert.description }}</p>
+                <p class="text-muted"><i class="fa-solid fa-location-dot"></i> {{ alert.longitude }}</p>
+                <p class="text-muted"><i class="fa-solid fa-clock"></i> {{ alert.submitted_at }}</p>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info text-center mt-4">
+        No {{ incident_type|capfirst }} alerts found.
+    </div>
+{% endif %}
+
     </div>
 </div>
 {% endblock %}

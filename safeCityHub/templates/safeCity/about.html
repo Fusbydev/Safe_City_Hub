@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<div class="d-flex flex-column text-center d-flex" style="height: auto; padding-top: 55px;">
+    <div class="container-fluid about p-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="container p-4 rounded shadow about-main text-start p-5 rounded-5">
+                    <p class="lead fw-bold fs-3">Building Safer Communities</p>
+                    <p>SafeCity Hub connects people, emergency services, and
+                        government agencies to create resilient, prepared communities.</p>
+                    <a href="" class="learn-more rounded-5 ">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container text-start pt-4">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-6 d-flex flex-column justify-content-center">
+                <p class="fs-3 fw-bold text-center text-md-start">About SafeCity Hub</p>
+                <p class="text-center text-md-start">
+                    At Safe City Hub, we believe that every citizen deserves to live in a community that feels secure, responsive, and united.
+                    Our platform empowers individuals to easily report incidents, track updates, and stay informed about the safety of their surroundings — all in real-time.
+                    <br><br>
+                    Whether it's a public hazard, suspicious activity, or emergencies requiring urgent attention, Safe City Hub connects you directly with the right responders.
+                    We make reporting simple, transparent, and accessible for everyone.
+                </p>
+            </div>
+            
+            <div class="col-12 col-md-6 col-lg-6">
+                <img src="{% static 'assets/Gemini_Generated_Image_82oxf882oxf882ox.jpg' %}" alt="" class="img-fluid">
+            </div>
+        </div>
+        <div class="row gx-3 gy-3">
+            <p class="fs-3 fw-bold">Our Core Values</p>
+        
+            <div class="col-12 col-md-6 col-lg-3 border-start border-5 border-primary shadow p-3">
+                <p class="fs-5 fw-bold">Community First</p>
+                <p>We prioritize the needs and safety of communities we serve.</p>
+            </div>
+            
+            <div class="col-12 col-md-6 col-lg-3 border-start border-5 border-success shadow p-3">
+                <p class="fs-5 fw-bold">Innovation</p>
+                <p>Continuous improvement through technology.</p>
+            </div>
+            
+            <div class="col-12 col-md-6 col-lg-3 border-start border-5 border-info shadow p-3">
+                <p class="fs-5 fw-bold">Collaboration</p>
+                <p>Partnership between citizens, services, and government.</p>
+            </div>
+            
+            <div class="col-12 col-md-6 col-lg-3 border-start border-5 border-danger shadow p-3">
+                <p class="fs-5 fw-bold">Accessibility</p>
+                <p>Information and services available to everyone.</p>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+{% endblock %}

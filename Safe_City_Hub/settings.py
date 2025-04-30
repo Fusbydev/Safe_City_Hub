@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import pymysql
+import mongoengine
+import os
+from dotenv import load_dotenv
 pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -61,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'Safe_City_Hub.urls'
@@ -83,18 +87,37 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Safe_City_Hub.wsgi.application'
 
+#mongoengine
+load_dotenv()
+
+mongo_uri = os.getenv('MONGO_URI')
+mongoengine.connect(
+    db='safecityhub',  # The name of your database
+    host=mongo_uri,
+    alias='default',
+    ssl=True,
+    maxPoolSize=50,
+)
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'safecityhub',      # This DB should exist in phpMyAdmin
+#         'USER': 'root',           # MySQL username
+#         'PASSWORD': '',            # MySQL password
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'safecityhub',      # This DB should exist in phpMyAdmin
-        'USER': 'root',           # MySQL username
-        'PASSWORD': '',            # MySQL password
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -147,7 +170,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-
+LOGIN_URL = '/safecityhub/login/'
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = "none"
 LOGIN_REDIRECT_URL = "home"

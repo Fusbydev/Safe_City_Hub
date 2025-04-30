@@ -12,4 +12,11 @@ urlpatterns = [
     path("report/", views.submitReport, name="submitReport"),
     path("emergencies/getCords/", views.getCords, name="getCords"),
     path('emergency_list/', views.emergency_list, name='emergency_list'),
+    path('safecityhub/user/<int:user>/', views.user_profile, name='user'),
+    path('about/', views.about, name='about'),
+    path('report/<str:pk>/edit/', views.edit_report, name='edit_report'),
+    path('report/<str:pk>/delete/', views.delete_report, name='delete_report'),
+    path('register/', views.register, name='register'),
+    path("admin/", views.admin, name="admin"),
+    path("analytics/", views.analytics, name="analytics"),
 ]

@@ -13,10 +13,9 @@
                 <a class="btn btn-primary" href="{% url 'alerts' %}">View Alerts</a>
             </div>            
         </div>
-
         <!-- Right Column: Image -->
         <div class="col-lg-6 d-flex justify-content-center">
-            <img src="{% static 'assets/alert.gif' %}" alt="Alert GIF" class="img-fluid w-75">
+            <img src="{% static 'assets/alert.gif' %}" alt="Alert GIF" class="img-fluid w-75 rounded-circle">
         </div>
     </div>
 </div>
@@ -29,12 +28,14 @@
     {% for emergency in all_emergencies %}
     <div class="row text-start">
         <div class="col-12">
+            {% if emergency.status != 'pending' %}
             {% if emergency.incident_type == 'crime' %}
                 <p class="p-2 bg-danger rounded mb-2"><strong>Crime Alert:</strong> {{ emergency.description }}</p>
             {% elif emergency.incident_type == 'accident' %}
                 <p class="p-2 bg-warning rounded mb-2"><strong>Accident Alert:</strong> {{ emergency.description }}</p>
             {% elif emergency.incident_type == 'civic' %}
                 <p class="p-2 bg-warning rounded mb-2"><strong>Civic Alert:</strong> {{ emergency.description }}</p>
+            {% endif %}
             {% endif %}
         </div>
     </div>
