@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
@@ -22,22 +22,35 @@ from bson import ObjectId
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+from mongoengine.errors import DoesNotExist
+
 
 load_dotenv()
 
 def emergency_list(request):
+    if request.method == 'POST':
+        emergency_id = request.POST.get('emergency_id')
+        comment = request.POST.get('comment')
+
+        if emergency_id and comment:
+            emergency = Emergencies.objects(id=ObjectId(emergency_id)).first()
+            if emergency:
+                emergency.comments.append(comment)
+                emergency.save()
+
+        return redirect('emergency_list')  # Replace with the name of your URL pattern if needed
+
     # Retrieve all emergencies from the database
-    all_emergencies = Emergencies.objects.all()
-    
+    all_emergencies = Emergencies.objects.order_by('-submitted_at')
+
     # Debugging: Print the data to the console/log
     print("All Emergencies:", all_emergencies)
 
-    # Correct way to pass the context: it must be a dictionary
+    # Context must be a dictionary
     context = {
         'all_emergencies': all_emergencies,
     }
 
-    # Render the template with the correct context
     return render(request, 'safeCity/homepage.html', context)
 
 
@@ -296,4 +309,20 @@ def report_details(request, report_id):
         'report': report,
         'proof_url': proof_url,
     })
- 
+
+def update_report(request, report_id):
+    try:
+        report = Emergencies.objects.get(id=report_id)
+    except DoesNotExist:
+        raise Http404("Report not found")
+
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status:
+            report.status = new_status
+            report.save()
+            return HttpResponseRedirect(reverse('view_report', args=[str(report.id)]))
+
+    return render(request, 'admin/updatereport.html', {'report': report})
+
+    

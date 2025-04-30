@@ -15,17 +15,24 @@
         <p>Member Since : {{user_obj.date_joined}}</p>
       </div>
       <div class="col-md-3">
-        <a href="#" class="btn btn-outline-primary">Edit Profile
-          <i class="fa-solid fa-pen-to-square"></i>
-        </a>
-        {% if user.is_authenticated %}
-
-          <a class="btn btn-danger" href="{% url 'logout' %}">Log out <i
-              class="fa-solid fa-right-from-bracket"></i></a>
-        {% else %}
-          <a class="btn btn-primary" href="{% url 'login' %}">Log in <i
-              class="fa-solid fa-right-to-bracket"></i></a>
-        {% endif %}
+        <div class="d-flex gap-2">
+          <a href="#" class="btn btn-outline-primary btn-sm">Edit Profile
+            <i class="fa-solid fa-pen-to-square"></i>
+          </a>
+          {% if user.is_superuser %}
+            <a href="{% url 'admin' %}" class="btn btn-warning btn-sm">Admin Panel <i class="fa-solid fa-shield  "></i></a>
+          {% endif %}
+        
+          {% if user.is_authenticated %}
+            <a class="btn btn-danger btn-sm" href="{% url 'logout' %}">
+              Log out <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+          {% else %}
+            <a class="btn btn-primary btn-sm" href="{% url 'login' %}">
+              Log in <i class="fa-solid fa-right-to-bracket"></i>
+            </a>
+          {% endif %}
+        </div>
       </div>
     </div>
     <div class="row mt-2">
