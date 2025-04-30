@@ -26,23 +26,64 @@
     </div>
 
     {% for emergency in all_emergencies %}
-    <div class="row text-start">
-        <div class="col-12">
-            {% if emergency.status != 'pending' %}
-            {% if emergency.incident_type == 'crime' %}
-                <p class="p-2 bg-danger rounded mb-2"><strong>Crime Alert:</strong> {{ emergency.description }}</p>
-            {% elif emergency.incident_type == 'accident' %}
-                <p class="p-2 bg-warning rounded mb-2"><strong>Accident Alert:</strong> {{ emergency.description }}</p>
-            {% elif emergency.incident_type == 'civic' %}
-                <p class="p-2 bg-warning rounded mb-2"><strong>Civic Alert:</strong> {{ emergency.description }}</p>
-            {% endif %}
-            {% endif %}
+    {% if emergency.status != 'pending' %}
+        <div class="row text-start mb-4">
+            <div class="col-12">
+                {% if emergency.incident_type == 'crime' %}
+                <div class="card border-start border-2 border-primary bg-primary bg-opacity-25 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary fw-bold text-capitalize">{{ emergency.incident_type }} Incident</h5>
+                        <p class="text-muted mb-1"><strong>Date:</strong> {{ emergency.date }}</p>
+                        <p class="text-muted mb-1"><strong>Address:</strong> {{ emergency.address }}</p>
+                        <p class="mb-3"><strong>Description:</strong> {{ emergency.description }}</p>
+                        <div class="d-flex align-items-start">
+                            <div class="d-flex align-items-center justify-content-center rounded-circle bg-warning text-white me-3" style="width: 36px; height: 36px; flex-shrink: 0;">
+                                <i class="fa-solid fa-exclamation"></i>
+                            </div>
+                            <p class="mb-0"><strong>Mitigation:</strong> {{ emergency.ways_to_mitigate }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {% elif emergency.incident_type == 'accident' %}
+                <div class="card border-start border-2 border-success bg-success bg-opacity-25 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-success fw-bold text-capitalize">{{ emergency.incident_type }} Incident</h5>
+                        <p class="text-muted mb-1"><strong>Date:</strong> {{ emergency.date }}</p>
+                        <p class="text-muted mb-1"><strong>Address:</strong> {{ emergency.address }}</p>
+                        <p class="mb-3"><strong>Description:</strong> {{ emergency.description }}</p>
+                        <div class="d-flex align-items-start">
+                            <div class="d-flex align-items-center justify-content-center rounded-circle bg-warning text-white me-3" style="width: 36px; height: 36px; flex-shrink: 0;">
+                                <i class="fa-solid fa-exclamation"></i>
+                            </div>
+                            <p class="mb-0"><strong>Mitigation:</strong> {{ emergency.ways_to_mitigate }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {% elif emergency.incident_type == 'civic' %}
+                <div class="card border-start border-2 border-info bg-info bg-opacity-25 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-info fw-bold text-capitalize">{{ emergency.incident_type }} Incident</h5>
+                        <p class="text-muted mb-1"><strong>Date:</strong> {{ emergency.date }}</p>
+                        <p class="text-muted mb-1"><strong>Address:</strong> {{ emergency.address }}</p>
+                        <p class="mb-3"><strong>Description:</strong> {{ emergency.description }}</p>
+                        <div class="d-flex align-items-start">
+                            <div class="d-flex align-items-center justify-content-center rounded-circle bg-warning text-white me-3" style="width: 36px; height: 36px; flex-shrink: 0;">
+                                <i class="fa-solid fa-exclamation"></i>
+                            </div>
+                            <p class="mb-0 align-items-center"><strong>Mitigation:</strong> {{ emergency.ways_to_mitigate }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% empty %}
     <div class="row text-start">
         <div class="col-12">
-            <p>No emergencies reported.</p>
+            <div class="alert alert-secondary">No emergencies reported.</div>
         </div>
     </div>
 {% endfor %}

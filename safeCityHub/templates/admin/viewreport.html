@@ -1,14 +1,45 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SafeCity Hub - View Report</title>
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    /* Make sure the map container takes full width and adjusts height */
+    #map {
+      width: 100%;
+      /* Full width */
+      height: 400px;
+      /* Set default height */
+    }
+
+    /* Adjust the map's height on smaller screens */
+    @media (max-width: 768px) {
+      #map {
+        height: 300px;
+        /* Smaller height for mobile */
+      }
+    }
+
+    /* Adjust the map's height on very small screens */
+    @media (max-width: 480px) {
+      #map {
+        height: 250px;
+        /* Even smaller height */
+      }
+    }
+  </style>
 </head>
+
 <body class="admin-view">
   <header class="admin-header">
     <div class="logo-container">
@@ -17,67 +48,70 @@
     </div>
     <a href="dashboard.html" class="btn header-btn">Back to Dashboard</a>
   </header>
-  
+
   <div class="main-content-admin">
     <div class="admin-container">
       <div class="report-view">
         <div class="report-title-section">
-          <h2>Store break-in</h2>
+          <h2>{{ report.incident_type }}</h2>
           <span class="status-badge status-review">Under review</span>
         </div>
-        <div class="report-id-section">Report id: C-2025-0412</div>
-        
+        <div class="report-id-section">Report id: {{ report.id }}</div>
+
         <div class="report-details">
           <div class="detail-item">
             <div class="detail-label">Type:</div>
-            <div class="detail-value">Criminal Activity</div>
+            <div class="detail-value">{{ report.incident_type }}</div>
           </div>
-          
+
           <div class="detail-item">
             <div class="detail-label">Date Reported:</div>
-            <div class="detail-value">April 12, 2025</div>
+            <div class="detail-value">{{ report.date }}</div>
           </div>
-          
+
           <div class="detail-item">
             <div class="detail-label">Location:</div>
-            <div class="detail-value">Carriedo Street, Quiapo, Manila</div>
+            <div class="detail-value">{{ report.address }}</div>
+            <input type="text" value="{{ report.longitude }}" id="longitude" hidden>
+            <input type="text" value="{{ report.latitude }}" id="latitude" hidden>
           </div>
-          
+
           <div class="detail-item">
             <div class="detail-label">Reported by:</div>
-            <div class="detail-value">Trialero Tralala</div>
+            <div class="detail-value">{{ report.user }}</div>
           </div>
-          
+
           <div class="detail-item">
             <div class="detail-label">Contact information:</div>
-            <div class="detail-value">+63 45289657234</div>
+            <div class="detail-value">{{ report.contact_number }}</div>
           </div>
-          
+
           <div class="detail-item">
             <div class="detail-label">Description:</div>
-            <div class="detail-value">Glass storefront was broken at approximately 3:00 AM. Security camera shows two individuals wearing masks. Cash register and several electronic items were stolen. Estimated damage is around 5,000 pesos.</div>
+            <div class="detail-value">{{ report.description }}</div>
           </div>
         </div>
-        
+
         <div class="report-section">
           <h3>Report Location</h3>
-          <div class="map-container">
-            <img src="map-quiapo.jpg" alt="Map showing incident location" class="location-map">
+          <div class=" mt-5 pt-5">
+            <div id="map"></div>
           </div>
         </div>
-        
+
         <div class="report-section">
           <h3>Evidence Photos</h3>
           <div class="evidence-photos">
+            {% if proof_url %}
             <div class="evidence-photo">
-              <img src="security-cam.jpg" alt="Security camera footage" class="evidence-img">
+              <img src="{{ proof_url }}" alt="Evidence Photo" class="evidence-img">
             </div>
-            <div class="evidence-photo">
-              <img src="broken-window.jpg" alt="Broken storefront" class="evidence-img">
-            </div>
+            {% else %}
+            <p>No proof uploaded.</p>
+            {% endif %}
           </div>
         </div>
-        
+
         <div class="action-buttons admin-actions">
           <button class="btn btn-secondary">Cancel</button>
           <a href="updatereport.html" class="btn btn-primary">Update Report</a>
@@ -86,9 +120,28 @@
     </div>
   </div>
 
-  <!-- Custom JS -->
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
   <script>
-    // Any additional JavaScript can be placed here
+    // Get the values of latitude and longitude
+    var latitude = parseFloat(document.getElementById('latitude').value);
+    var longitude = parseFloat(document.getElementById('longitude').value);
+
+    // Initialize the map
+    var map = L.map('map').setView([latitude, longitude], 13); // Default zoom level is 13
+
+    // Add a tile layer to the map (you can use other providers if you prefer)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Add a marker at the given coordinates
+    L.marker([latitude, longitude]).addTo(map)
+      .bindPopup('<b>Report Location</b><br>' + '{{ report.incident_type }}')
+      .openPopup();
   </script>
+
 </body>
+
 </html>

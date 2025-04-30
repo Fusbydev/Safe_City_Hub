@@ -14,13 +14,21 @@ from bson import ObjectId
 import datetime
 from django.http import Http404
 from django.contrib import messages
+from django.urls import reverse
+from django.http import HttpResponse
+from pymongo import MongoClient
+from gridfs import GridFS
+from bson import ObjectId
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
 
-
+load_dotenv()
 
 def emergency_list(request):
     # Retrieve all emergencies from the database
     all_emergencies = Emergencies.objects.all()
-
+    
     # Debugging: Print the data to the console/log
     print("All Emergencies:", all_emergencies)
 
@@ -73,6 +81,11 @@ def submitReport(request):
     submitted = False
 
     if request.method == "POST":
+        GEMINI_KEY = os.getenv('GEMINI_API_KEY')
+        genai.configure(api_key=GEMINI_KEY)
+        
+
+
         # Get form data
         incident_type = request.POST.get("incident-type")
         urgency_level = request.POST.get("urgency-level")
@@ -85,6 +98,17 @@ def submitReport(request):
         proof = request.FILES.get("proof")
         address = request.POST.get("location")
         status = "pending"
+
+
+        prompt = f"Genarate a ways to mitigate '{incident_type}, with a description of {description} in a small paragraph'"
+        model = genai.GenerativeModel("gemini-1.5-flash")
+
+        response = model.generate_content(prompt)
+
+        ways_to_mitigate = response.text
+
+
+        print(response.text)
 
         # Convert date string to datetime object
         try:
@@ -115,7 +139,8 @@ def submitReport(request):
             anonymous=anonymous,
             proof=proof,
             address = address,
-            status=status
+            status=status,
+            ways_to_mitigate = ways_to_mitigate
         )
         submitted = True
 
@@ -155,16 +180,14 @@ def about(request):
 
 
 @login_required
-def user_profile(request, user):
-    # Get the User object from the Django User model
-    user_obj = get_object_or_404(User, id=user)
-    #convert user_obj to string
-    
+def user_profile(request):
+    user_obj = request.user
 
-    # Query the Emergencies collection using ObjectId to match the user reference
-    total_reports = Emergencies.objects.filter(user=user_obj.id).count()  # Ensure we query with ObjectId
+    total_reports = Emergencies.objects.filter(user=user_obj.id).count()
+    user_reports_list = Emergencies.objects.filter(user=user_obj.id).order_by('-submitted_at')
+    on_going_count = user_reports_list.filter(status='pending').count()
 
-    # Fetch the social account linked with the user (make sure this user has one)
+    # GitHub social login info
     try:
         social = SocialAccount.objects.get(user=user_obj)
         github_data = social.extra_data
@@ -174,12 +197,7 @@ def user_profile(request, user):
         avatar_url = None
         github_username = None
 
-    # User's reports - query by the user reference (ensure we use ObjectId here)
-    user_reports_list = Emergencies.objects.filter(user=user_obj.id).order_by('-submitted_at')
-    on_going_count = user_reports_list.filter(status='pending').count()
-
-    # Pagination setup
-    paginator = Paginator(user_reports_list, 5)  # Show 5 reports per page
+    paginator = Paginator(user_reports_list, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -224,12 +242,58 @@ def admin(request):
         return redirect('home')
     
     reports = Emergencies.objects.all()
+    report_count_resolved = Emergencies.objects.filter(status='resolved').count()
 
-    return render(request, 'admin/dashboard.html', {'reports': reports})
+    
+    print(report_count_resolved, "report count")
+    return render(request, 'admin/dashboard.html', {'reports': reports, 'report_count_resolved': report_count_resolved})
+    
 
 def analytics(request):
     return render(request, 'admin/analytics.html')
 
 
 
+from django.http import HttpResponse
+from pymongo import MongoClient
+from bson import ObjectId
+from gridfs import GridFS
 
+
+
+def report_details(request, report_id):
+    try:
+        report = Emergencies.objects.get(id=ObjectId(report_id))
+    except Emergencies.DoesNotExist:
+        return render(request, '404.html')
+
+    if request.GET.get('serve_proof'):
+        print("serve proof detected")
+        try:
+            file_id = ObjectId(request.GET.get('serve_proof'))
+            client = MongoClient(os.getenv("MONGO_URI"))
+            db = client['safecityhub']
+            fs = GridFS(db, collection='proofs')
+            file = fs.get(file_id)
+
+            if file:
+                return HttpResponse(file.read(), content_type=file.content_type)
+            else:
+                return HttpResponse("Proof not found", status=404)
+        except Exception as e:
+            print(f"Error accessing proof file: {str(e)}")
+            return HttpResponse(f"Error accessing proof file: {str(e)}", status=404)
+
+    proof_url = None
+    if report.proof:
+        try:
+            proof_url = f"{request.path}?serve_proof={str(report.proof.grid_id)}"
+            print("Generated proof URL:", proof_url)
+        except Exception as e:
+            print(f"Error accessing proof field: {str(e)}")
+
+    return render(request, 'admin/viewreport.html', {
+        'report': report,
+        'proof_url': proof_url,
+    })
+ 
