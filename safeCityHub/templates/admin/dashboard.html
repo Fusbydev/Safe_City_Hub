@@ -52,7 +52,7 @@
           </div>
           
           <div class="stats-card resolved">
-            <div class="number">25</div>
+            <div class="number">{{ report_count_resolved }}</div>
             <div class="label">Resolved Reports</div>
           </div>
           
@@ -109,7 +109,7 @@
                 <td>{{ report.date }}</td>
                 <td><span class="status-badge status-review">{{ report.status }}</span></td>
                 <td class="action-buttons">
-                  <a href="viewreport.html" class="action-button">View</a>
+                  <a href="{%url 'view_report' report.id%}" class="action-button">View</a>
                   <a href="updatereport.html" class="action-button">Update</a>
                 </td>
               </tr>

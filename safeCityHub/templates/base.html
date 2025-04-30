@@ -53,7 +53,7 @@
             </li>
             <li>
               {% if user.id %}
-              <a class="nav-link" href="{% url 'user' user.id %}">{{ user.username }}</a>
+              <a class="nav-link" href="{% url 'user_profile' %}">{{ user.username }}</a>
               {% else %}
               <a href="{% url 'login' %}" class="nav-link">Login</a>
               {% endif %}
