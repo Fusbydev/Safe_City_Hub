@@ -9,7 +9,7 @@ A Django-based emergency reporting system that allows users to report incidents,
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/Safe_City_Hub.git
+git clone https://github.com/your-username/Safe_City_Hub.git](https://github.com/Fusbydev/Safe_City_Hub.git
 cd Safe_City_Hub
 ```
 
