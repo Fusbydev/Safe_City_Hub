@@ -16,7 +16,7 @@
       </div>
       <div class="col-md-3">
         <div class="d-flex gap-2">
-          <a href="#" class="btn btn-outline-primary btn-sm">Edit Profile
+          <a href="{% url 'update_profile' %}" class="btn btn-outline-primary btn-sm">Edit Profile
             <i class="fa-solid fa-pen-to-square"></i>
           </a>
           {% if user.is_superuser %}

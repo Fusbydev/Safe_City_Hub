@@ -20,5 +20,7 @@ urlpatterns = [
     path("admin/", views.admin, name="admin"),
     path("analytics/", views.analytics, name="analytics"),
     path('view_report/<str:report_id>/', views.report_details, name='view_report'),
-    path('update_report/<str:report_id>/', views.update_report, name='update_report')
+    path('update_report/<str:report_id>/', views.update_report, name='update_report'),
+
+    path('/update_profile/', views.update_profile, name='update_profile')
 ]

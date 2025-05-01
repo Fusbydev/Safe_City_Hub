@@ -329,4 +329,7 @@ def update_report(request, report_id):
 
     return render(request, 'admin/updatereport.html', {'report': report})
 
+def update_profile(request):
+    return render(request, 'safeCity/editprofile.html')
+
     
