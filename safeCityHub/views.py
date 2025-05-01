@@ -306,10 +306,12 @@ def report_details(request, report_id):
         except Exception as e:
             print(f"Error accessing proof field: {str(e)}")
 
+    comments = report.comments if hasattr(report, 'comments') else []
     return render(request, 'admin/viewreport.html', {
         'report': report,
         'proof_url': proof_url,
         'username': username,  # Pass to template
+        'comments': comments
     })
 
 def update_report(request, report_id):
