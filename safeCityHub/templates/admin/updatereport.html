@@ -48,19 +48,19 @@
             <div class="form-col">
               <label for="date">Incident Date & Time</label>
               <div class="datetime-input">
-                <input type="datetime-local" id="date" name="date" value="2025-04-09T03:00" class="form-control" readonly>
+                <input type="datetime-local" id="date" name="date" value="{{report.date}}" class="form-control" readonly>
               </div>
             </div>
             
             <div class="form-col">
               <label for="location">Location</label>
-              <input type="text" id="location" name="location" value="Carriedo St. Quiapo" class="form-control" readonly>
+              <input type="text" id="location" name="location" value="{{report.address}}" class="form-control" readonly>
             </div>
           </div>
           
           <div class="form-group">
             <label for="description">Description</label>
-            <textarea id="description" name="description" class="form-control" readonly>Glass storefront was broken at approximately 3:00 AM. Security camera shows two individuals wearing masks. Cash register and several electronic items were stolen. Estimated damage is around 5,000 pesos.</textarea>
+            <textarea id="description" name="description" class="form-control" readonly>{{report.description}}</textarea>
           </div>
           
           <div class="form-group">

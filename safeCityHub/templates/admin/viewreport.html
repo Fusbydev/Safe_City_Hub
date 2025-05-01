@@ -20,7 +20,7 @@
 
 <body>
   <!-- Header -->
-  <header class="bg-primary py-2">
+  <header class="py-2">
     <div class="container-fluid">
       <div class="row align-items-center">
         <div class="col-md-6 d-flex align-items-center">
@@ -41,43 +41,43 @@
       <div class="col-lg-8 pe-lg-4">
         <!-- Report Title -->
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <h2 class="mb-0">Store break-in</h2>
-          <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Under review</span>
+          <h2 class="mb-0">{{report.incident_type}}</h2>
+          <span class="badge bg-warning text-dark rounded-pill px-3 py-2">{{report.status}}</span>
         </div>
-        <div class="text-secondary mb-4">Report id : C-2025-0412</div>
+        <div class="text-secondary mb-4">Report id : {{report.id}}</div>
         
         <!-- Report Details -->
         <div class="border-top pt-3 mb-4">
           <div class="row mb-3">
             <div class="col-md-3 fw-bold">Type:</div>
-            <div class="col-md-9">Criminal Activity</div>
+            <div class="col-md-9">{{report.incident_type}}</div>
           </div>
           
           <div class="row mb-3">
             <div class="col-md-3 fw-bold">Date Reported:</div>
-            <div class="col-md-9">April 12, 2025</div>
+            <div class="col-md-9">{{report.date}}</div>
           </div>
           
           <div class="row mb-3">
             <div class="col-md-3 fw-bold">Location:</div>
-            <div class="col-md-9">Carriedo Street, Quiapo, Manila</div>
+            <div class="col-md-9">{{report.address}}</div>
             <input type="text" value="{{ report.longitude }}" id="longitude" hidden>
             <input type="text" value="{{ report.latitude }}" id="latitude" hidden>
           </div>
           
           <div class="row mb-3">
             <div class="col-md-3 fw-bold">Reported by:</div>
-            <div class="col-md-9">Tralalero Tralala</div>
+            <div class="col-md-9">{{username}}</div>
           </div>
           
           <div class="row mb-3">
             <div class="col-md-3 fw-bold">Contact information:</div>
-            <div class="col-md-9">+63 45289657234</div>
+            <div class="col-md-9">{{report.contact_number}}</div>
           </div>
           
           <div class="row mb-3">
             <div class="col-md-3 fw-bold">Description:</div>
-            <div class="col-md-9">Glass storefront was broken at approximately 3:00 AM. Security camera shows two individuals wearing masks. Cash register and several electronic items were stolen. Estimated damage is around 5,000 pesos.</div>
+            <div class="col-md-9">{{report.description}}</div>
           </div>
         </div>
         
@@ -93,12 +93,7 @@
           <div class="row g-3">
             <div class="col-6 col-md-3">
               <div class="position-relative">
-                <img src="{% static 'assets/evidence1.jpg' %}" alt="Evidence Photo 1" class="img-fluid rounded" style="width: 100%; height: 150px; object-fit: cover;">
-              </div>
-            </div>
-            <div class="col-6 col-md-3">
-              <div class="position-relative">
-                <img src="{% static 'assets/evidence2.jpg' %}" alt="Evidence Photo 2" class="img-fluid rounded" style="width: 100%; height: 150px; object-fit: cover;">
+                <img src="{{proof_url}}" alt="Evidence Photo 1" class="img-fluid rounded" style="width: 100%; height: 150px; object-fit: cover;">
               </div>
             </div>
           </div>
@@ -107,7 +102,9 @@
         <!-- Action Buttons -->
         <div class="d-flex justify-content-between mt-4">
           <button class="btn btn-secondary px-4">Cancel</button>
-          <button class="btn btn-primary px-4">Update Report</button>
+          {% if user.is_superuser %}
+            <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#updateReportModal">Update</button>
+          {% endif %}
         </div>
       </div>
       
@@ -117,39 +114,12 @@
           <h3 class="h5 mb-3">Comments</h3>
           
           <div class="comment-scroll" style="max-height: 600px; overflow-y: auto;">
-            <!-- Comment 1 -->
-            <div class="bg-white p-3 rounded mb-3">
-              <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              <p class="text-muted text-end mb-0" style="font-size: 0.8rem;">May 1, 2025, 10:52 am</p>
-            </div>
-            
-            <!-- Comment 2 -->
-            <div class="bg-white p-3 rounded mb-3">
-              <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              <p class="text-muted text-end mb-0" style="font-size: 0.8rem;">May 1, 2025, 10:52 am</p>
-            </div>
-            
-            <!-- Comment 3 -->
-            <div class="bg-white p-3 rounded mb-3">
-              <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              <p class="text-muted text-end mb-0" style="font-size: 0.8rem;">May 1, 2025, 10:52 am</p>
-            </div>
-            
-            <!-- Comment 4 -->
-            <div class="bg-white p-3 rounded mb-3">
-              <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              <p class="text-muted text-end mb-0" style="font-size: 0.8rem;">May 1, 2025, 10:52 am</p>
-            </div>
-            
-            <!-- Comment 5 -->
-            <div class="bg-white p-3 rounded mb-3">
-              <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              <p class="text-muted text-end mb-0" style="font-size: 0.8rem;">May 1, 2025, 10:52 am</p>
-            <!-- Comment 6 -->
-            <div class="bg-white p-3 rounded mb-3">
-              <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              <p class="text-muted text-end mb-0" style="font-size: 0.8rem;">May 1, 2025, 10:52 am</p>
-            </div>
+            {% for comment in comments %}
+              <div class="bg-white p-3 rounded mb-3">
+                <p class="mb-1">{{ comment.text }}</p>
+                <p class="text-muted text-end mb-0" style="font-size: 0.8rem;">{{ comment.timestamp }}</p>
+              </div>
+            {% endfor %}
           </div>
         </div>
       </div>
