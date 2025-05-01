@@ -9,7 +9,7 @@ A Django-based emergency reporting system that allows users to report incidents,
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/Safe_City_Hub.git](https://github.com/Fusbydev/Safe_City_Hub.git
+git clone https://github.com/Fusbydev/Safe_City_Hub.git
 cd Safe_City_Hub
 ```
 
@@ -22,9 +22,9 @@ Inside the `Safe_City_Hub/` directory, create a `.env` file:
 ```bash
 touch .env
 ```
-OR MANUALLY CREATE A .env FILE INSIDE Safe_City_Hub Folder
+**OR** manually create a `.env` file inside the `Safe_City_Hub` folder.
 
-Then add your environment variables:
+Add the following environment variables:
 
 ```
 MONGO_URI=HINGIN NYO SAKIN
@@ -35,9 +35,26 @@ GEMINI_API_KEY=HINGIN NYO SAKIN
 
 ---
 
-### 3. Install Dependencies
+### 3. Create and Activate Virtual Environment
 
-Ensure you have Python 3.10+ and `pipenv` or `venv` installed. Then run:
+Make sure you are using Python 3.10+.
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate on Windows
+venv\Scripts\activate
+
+# Activate on macOS/Linux
+source venv/bin/activate
+```
+
+---
+
+### 4. Install Dependencies
+
+Once the virtual environment is activated, install the required packages:
 
 ```bash
 pip install -r requirements.txt
@@ -45,17 +62,17 @@ pip install -r requirements.txt
 
 ---
 
-### 4. Run the Development Server
+### 5. Run the Development Server
 
 ```bash
 python manage.py runserver localhost:8080
 ```
 
-Visit: [http://localhost:8080](http://localhost:8080)
+Then open your browser and visit: [http://localhost:8080](http://localhost:8080)
 
 ---
 
-### 5. Apply Migrations & Create Superuser
+### 6. Apply Migrations & Create Superuser
 
 ```bash
 python manage.py makemigrations
@@ -80,6 +97,7 @@ python manage.py createsuperuser
 
 - Django, MongoEngine/Djongo, GridFS
 - Bootstrap 5 (frontend)
+
 ---
 
 ## 📄 License
