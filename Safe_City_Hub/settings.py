@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     # social providers
     "allauth.socialaccount.providers.github", # new
     "allauth.socialaccount.providers.twitter", # new
+    "allauth.socialaccount.providers.google",
 ]
 
 MIDDLEWARE = [

@@ -27,125 +27,63 @@
 
     {% for emergency in all_emergencies %}
     {% if emergency.status != 'pending' %}
-    <div class="row text-start mb-4">
-        <div class="col-12">
-            {% if emergency.incident_type == 'crime' %}
-            <div class="card border-start border-2 border-primary bg-primary bg-opacity-25 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title text-primary fw-bold text-capitalize">{{ emergency.incident_type }} Incident
-                    </h5>
-                    <p class="text-muted mb-1"><strong>Date:</strong> {{ emergency.date }}</p>
-                    <p class="text-muted mb-1"><strong>Address:</strong> {{ emergency.address }}</p>
-                    <p class="mb-3"><strong>Description:</strong> {{ emergency.description }}</p>
-                    <div class="d-flex align-items-start">
-                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-warning text-white me-3"
-                            style="width: 36px; height: 36px; flex-shrink: 0;">
-                            <i class="fa-solid fa-exclamation"></i>
-                        </div>
-                        <p class="mb-0"><strong>Mitigation:</strong> {{ emergency.ways_to_mitigate }}</p>
-                    </div>
-                    {% if emergency.comments %}
-                    <ul class="list-group mt-2">
-                        {% for comment in emergency.comments %}
-                        <li class="list-group-item bg-dark bg-opacity-50 text-white">{{ comment }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                    <form action="" method="post" class="mt-2">
-                        {% csrf_token %}
-                        <input type="hidden" name="emergency_id" value="{{ emergency.id }}">
-                        <div class="d-flex">
-                            <input type="text" class="form-control bg-transparent border-white" placeholder="Add a comment" name="comment">
-                            <button type="submit" class="btn btn-primary btn-sm">Comment</button>
-                        </div>
-                    </form>
-                    <a href="{%url 'view_report' emergency.id%}"
-                        class="action-button btn btn-primary btn-sm mb-2 mt-2">Learn More <i
-                            class="fa-solid fa-arrow-right"></i></a>
+    <div class="card mb-4 shadow-sm border-start border-4 
+        {% if emergency.incident_type == 'crime' %}border-primary bg-primary bg-opacity-10
+        {% elif emergency.incident_type == 'accident' %}border-success bg-success bg-opacity-10
+        {% elif emergency.incident_type == 'civic' %}border-info bg-info bg-opacity-10
+        {% endif %}">
+    
+        <div class="card-body text-start">
+            <h5 class="card-title text-capitalize fw-bold 
+                {% if emergency.incident_type == 'crime' %}text-primary
+                {% elif emergency.incident_type == 'accident' %}text-success
+                {% elif emergency.incident_type == 'civic' %}text-info
+                {% endif %}">
+                {{ emergency.incident_type }} Incident
+            </h5>
+    
+            <p class="text-muted mb-1"><strong>Date:</strong> {{ emergency.date }}</p>
+            <p class="text-muted mb-1"><strong>Address:</strong> {{ emergency.address }}</p>
+            <p class="mb-2"><strong>Description:</strong> {{ emergency.description }}</p>
+    
+            <div class="d-flex align-items-start mb-3">
+                <div class="me-2 text-warning">
+                    <i class="fa-solid fa-lightbulb fa-lg"></i>
                 </div>
-            </div>
+                <p class="mb-0"><strong>Mitigation:</strong> {{ emergency.ways_to_mitigate }}</p>
+            </div>    
+            <!-- Comment Form -->
+            <form method="post" class="d-flex">
+                {% csrf_token %}
+                <input type="hidden" name="emergency_id" value="{{ emergency.id }}">
+                <input type="text" name="comment" class="form-control me-2" placeholder="Add a comment..." required>
+                <button type="submit" class="btn btn-outline-primary btn-sm">Comment</button>
+            </form>
 
-            {% elif emergency.incident_type == 'accident' %}
-            <div class="card border-start border-2 border-success bg-success bg-opacity-25 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title text-success fw-bold text-capitalize">{{ emergency.incident_type }} Incident
-                    </h5>
-                    <p class="text-muted mb-1"><strong>Date:</strong> {{ emergency.date }}</p>
-                    <p class="text-muted mb-1"><strong>Address:</strong> {{ emergency.address }}</p>
-                    <p class="mb-3"><strong>Description:</strong> {{ emergency.description }}</p>
-                    <div class="d-flex align-items-start">
-                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-warning text-white me-3"
-                            style="width: 36px; height: 36px; flex-shrink: 0;">
-                            <i class="fa-solid fa-exclamation"></i>
-                        </div>
-                        <p class="mb-0"><strong>Mitigation:</strong> {{ emergency.ways_to_mitigate }}</p>
-                    </div>
-                    {% if emergency.comments %}
-                    <ul class="list-group mt-2">
-                        {% for comment in emergency.comments %}
-                        <li class="list-group-item bg-dark bg-opacity-50 text-white">{{ comment }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                    <form action="" method="post" class="mt-2">
-                        {% csrf_token %}
-                        <input type="hidden" name="emergency_id" value="{{ emergency.id }}">
-                        <div class="d-flex">
-                            <input type="text" class="form-control bg-transparent border-white" placeholder="Add a comment" name="comment">
-                            <button type="submit" class="btn btn-primary btn-sm">Comment</button>
-                        </div>
-                    </form>
-                    <a href="{%url 'view_report' emergency.id%}"
-                        class="action-button btn btn-primary btn-sm mb-2 mt-2">Learn More <i
-                            class="fa-solid fa-arrow-right"></i></a>
-                </div>
+            <div class="mb-3">
+                <h6 class="fw-semibold">Comments</h6>
+                <ul class="list-group list-group-flush">
+                    {% for comment in emergency.comments|slice:":3" %}
+                    <li class="list-group-item px-2">
+                        {{ comment.text }} 
+                        <br><small class="text-muted">{{ comment.timestamp }}</small>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-muted px-2">No comments yet.</li>
+                    {% endfor %}
+                </ul>
             </div>
-
-            {% elif emergency.incident_type == 'civic' %}
-            <div class="card border-start border-2 border-info bg-info bg-opacity-25 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title text-info fw-bold text-capitalize">{{ emergency.incident_type }} Incident</h5>
-                    <p class="text-muted mb-1"><strong>Date:</strong> {{ emergency.date }}</p>
-                    <p class="text-muted mb-1"><strong>Address:</strong> {{ emergency.address }}</p>
-                    <p class="mb-3"><strong>Description:</strong> {{ emergency.description }}</p>
-                    <div class="d-flex align-items-start">
-                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-warning text-white me-3"
-                            style="width: 36px; height: 36px; flex-shrink: 0;">
-                            <i class="fa-solid fa-exclamation"></i>
-                        </div>
-                        <p class="mb-0 align-items-center"><strong>Mitigation:</strong> {{ emergency.ways_to_mitigate }}
-                        </p>
-                    </div>
-                    {% if emergency.comments %}
-                    <ul class="list-group mt-2">
-                        {% for comment in emergency.comments %}
-                        <li class="list-group-item bg-dark bg-opacity-50 text-white">{{ comment }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                    <form action="" method="post" class="mt-2">
-                        {% csrf_token %}
-                        <input type="hidden" name="emergency_id" value="{{ emergency.id }}">
-                        <div class="d-flex">
-                            <input type="text" class="form-control bg-transparent border-white" placeholder="Add a comment" name="comment">
-                            <button type="submit" class="btn btn-primary btn-sm">Comment</button>
-                        </div>
-                    </form>
-                    <a href="{%url 'view_report' emergency.id%}"
-                        class="action-button btn btn-primary btn-sm mb-2 mt-2">Learn More <i
-                            class="fa-solid fa-arrow-right"></i></a>
-                </div>
+    
+            <div class="mt-3">
+                <a href="{% url 'view_report' emergency.id %}" class="btn btn-sm btn-primary">
+                    Learn More <i class="fa-solid fa-arrow-right"></i>
+                </a>
             </div>
-            {% endif %}
         </div>
     </div>
     {% endif %}
     {% empty %}
-    <div class="row text-start">
-        <div class="col-12">
-            <div class="alert alert-secondary">No emergencies reported.</div>
-        </div>
-    </div>
+    <div class="alert alert-secondary">No emergencies reported.</div>
     {% endfor %}
 
 </div>

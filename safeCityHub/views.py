@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import LoginForm, emergencyForm, RegisterForm
 from django.contrib.auth.decorators import login_required
-from .models import Emergencies
+from .models import Emergencies, Comment
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from allauth.socialaccount.models import SocialAccount
@@ -28,31 +29,22 @@ from mongoengine.errors import DoesNotExist
 load_dotenv()
 
 def emergency_list(request):
-    if request.method == 'POST':
-        emergency_id = request.POST.get('emergency_id')
-        comment = request.POST.get('comment')
-
-        if emergency_id and comment:
-            emergency = Emergencies.objects(id=ObjectId(emergency_id)).first()
-            if emergency:
-                emergency.comments.append(comment)
-                emergency.save()
-
-        return redirect('emergency_list')  # Replace with the name of your URL pattern if needed
-
-    # Retrieve all emergencies from the database
     all_emergencies = Emergencies.objects.order_by('-submitted_at')
 
-    # Debugging: Print the data to the console/log
-    print("All Emergencies:", all_emergencies)
+    if request.method == 'POST':
+        comment_text = request.POST.get('comment')
+        emergency_id = request.POST.get('emergency_id')
+        if comment_text and emergency_id:
+            emergency = Emergencies.objects(id=emergency_id).first()
+            if emergency:
+                emergency.comments.append(Comment(text=comment_text))
+                emergency.save()
+                return redirect(request.path)
 
-    # Context must be a dictionary
     context = {
-        'all_emergencies': all_emergencies,
+        'all_emergencies': all_emergencies
     }
-
     return render(request, 'safeCity/homepage.html', context)
-
 
 def alerts(request):
 
@@ -280,6 +272,14 @@ def report_details(request, report_id):
     except Emergencies.DoesNotExist:
         return render(request, '404.html')
 
+    # Attempt to fetch username from SQLite
+    try:
+        user = User.objects.get(id=report.user)
+        username = user.username
+    except User.DoesNotExist:
+        username = "Unknown User"
+
+    # Serve proof file if requested
     if request.GET.get('serve_proof'):
         print("serve proof detected")
         try:
@@ -297,6 +297,7 @@ def report_details(request, report_id):
             print(f"Error accessing proof file: {str(e)}")
             return HttpResponse(f"Error accessing proof file: {str(e)}", status=404)
 
+    # Generate proof URL for viewing
     proof_url = None
     if report.proof:
         try:
@@ -308,6 +309,7 @@ def report_details(request, report_id):
     return render(request, 'admin/viewreport.html', {
         'report': report,
         'proof_url': proof_url,
+        'username': username,  # Pass to template
     })
 
 def update_report(request, report_id):
