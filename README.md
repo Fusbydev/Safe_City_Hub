@@ -22,6 +22,7 @@ Inside the `Safe_City_Hub/` directory, create a `.env` file:
 ```bash
 touch .env
 ```
+OR MANUALLY CREATE A .env FILE INSIDE Safe_City_Hub Folder
 
 Then add your environment variables:
 
