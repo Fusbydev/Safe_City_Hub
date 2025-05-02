@@ -6,34 +6,48 @@
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 <div class="profile-container">
     <h1 class="profile-heading">Edit Profile</h1>
-
-    <div class="profile-content">
+    {% if success %}
+    <div class="alert alert-success" role="alert">
+        Profile updated successfully!
+    </div>
+    {% endif %}
+    <div class="profile-content text-start">
         <div class="profile-avatar-section">
-            <div class="profile-avatar">
-                <div class="avatar-placeholder">U0</div>
+            <div class="profile-avatar text-center mb-3">
+                {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.profile_picture.url }}" 
+                         alt="Profile Picture" 
+                         class="rounded-circle shadow border border-3" 
+                         style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                    <img src="/media/profile_pictures/default.jpg" 
+                         alt="Default Picture" 
+                         class="rounded-circle shadow border border-3" 
+                         style="width: 150px; height: 150px; object-fit: cover;">
+                {% endif %}
             </div>
 
-            <div class="profile-photo-upload">
-                <button class="upload-photo-btn">Upload Photo</button>
-                <div class="file-size-info">
-                    <p>Maximum size: <span class="text-muted">(palagay note sa maximum size na pwede lagay)</span></p>
-                    <p class="example-text">example 2MB (jpg, png)</p>
+            <form class="profile-form text-start" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="profile-photo-upload">
+                    <input type="file" name="profile_photo" id="profile">
+                    <div class="file-size-info">
+                        <p>Maximum size: <span class="text-muted">(palagay note sa maximum size na pwede lagay)</span>
+                        </p>
+                        <p class="example-text">example 2MB (jpg, png)</p>
+                    </div>
                 </div>
-            </div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}">
         </div>
 
-        <form class="profile-form" method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" class="form-control">
-            </div>
-
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" class="form-control">
-            </div>
-
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" value="{{ user.username }}">
+        </div>
+        <!--
             <div class="form-group">
                 <label for="new-password">New Password (leave blank to keep current)</label>
                 <input type="password" id="new-password" name="new_password" class="form-control">
@@ -43,11 +57,13 @@
                 <label for="confirm-password">Confirm New Password</label>
                 <input type="password" id="confirm-password" name="confirm_password" class="form-control">
             </div>
+            -->
 
-            <div class="form-actions">
-                <button type="button" class="btn btn-cancel">Cancel</button>
-                <button type="submit" class="btn btn-save">Save Changes</button>
-            </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-cancel">Cancel</button>
+            <button type="submit" class="btn btn-save">Save Changes</button>
+        </div>
         </form>
     </div>
 </div>

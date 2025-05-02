@@ -32,26 +32,35 @@
         {% elif emergency.incident_type == 'accident' %}border-success bg-success bg-opacity-10
         {% elif emergency.incident_type == 'civic' %}border-info bg-info bg-opacity-10
         {% endif %}">
-    
+
         <div class="card-body text-start">
-            <h5 class="card-title text-capitalize fw-bold 
-                {% if emergency.incident_type == 'crime' %}text-primary
-                {% elif emergency.incident_type == 'accident' %}text-success
-                {% elif emergency.incident_type == 'civic' %}text-info
-                {% endif %}">
-                {{ emergency.incident_type }} Incident
-            </h5>
-    
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title text-capitalize fw-bold 
+                    {% if emergency.incident_type == 'crime' %}text-primary
+                    {% elif emergency.incident_type == 'accident' %}text-success
+                    {% elif emergency.incident_type == 'civic' %}text-info
+                    {% endif %}">
+                    {{ emergency.incident_type }} Incident
+                </h5>
+                <p class="badge rounded-pill 
+        {% if emergency.status == 'Pending' %}bg-warning text-dark
+        {% elif emergency.status == 'Resolved' %}bg-success
+        {% elif emergency.status == 'under_review' %}bg-danger
+        {% else %}bg-secondary
+        {% endif %} fs-6">
+                    {{ emergency.status }}
+            </p>
+            </div>
             <p class="text-muted mb-1"><strong>Date:</strong> {{ emergency.date }}</p>
             <p class="text-muted mb-1"><strong>Address:</strong> {{ emergency.address }}</p>
             <p class="mb-2"><strong>Description:</strong> {{ emergency.description }}</p>
-    
+
             <div class="d-flex align-items-start mb-3">
                 <div class="me-2 text-warning">
                     <i class="fa-solid fa-lightbulb fa-lg"></i>
                 </div>
                 <p class="mb-0"><strong>Mitigation:</strong> {{ emergency.ways_to_mitigate }}</p>
-            </div>    
+            </div>
             <!-- Comment Form -->
             <form method="post" class="d-flex">
                 {% csrf_token %}
@@ -65,7 +74,7 @@
                 <ul class="list-group list-group-flush">
                     {% for comment in emergency.comments|slice:":3" %}
                     <li class="list-group-item px-2">
-                        {{ comment.text }} 
+                        {{ comment.text }}
                         <br><small class="text-muted">{{ comment.timestamp }}</small>
                     </li>
                     {% empty %}
@@ -73,7 +82,7 @@
                     {% endfor %}
                 </ul>
             </div>
-    
+
             <div class="mt-3">
                 <a href="{% url 'view_report' emergency.id %}" class="btn btn-sm btn-primary">
                     Learn More <i class="fa-solid fa-arrow-right"></i>
