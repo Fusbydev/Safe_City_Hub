@@ -3,7 +3,16 @@ from mongoengine import (
     FileField, IntField, ListField, EmbeddedDocument, EmbeddedDocumentField
 )
 from datetime import datetime
+from django.contrib.auth.models import User
+from django.db import models
 
+
+class Profile_picture(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', default='profile_pictures/default.jpg')
+
+    def __str__(self):
+        return super().__str__()
 
 class Comment(EmbeddedDocument):
     text = StringField(required=True)

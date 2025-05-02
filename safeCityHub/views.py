@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .forms import LoginForm, emergencyForm, RegisterForm
 from django.contrib.auth.decorators import login_required
-from .models import Emergencies, Comment
+from .models import Emergencies, Comment, Profile_picture
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from allauth.socialaccount.models import SocialAccount
@@ -24,6 +24,7 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 from mongoengine.errors import DoesNotExist
+from django.core.files.storage import default_storage
 
 
 load_dotenv()
@@ -192,14 +193,19 @@ def user_profile(request):
     user_reports_list = Emergencies.objects.filter(user=user_obj.id).order_by('-submitted_at')
     on_going_count = user_reports_list.filter(status='pending').count()
 
+    # Use custom uploaded profile picture
+    try:
+        profile = Profile_picture.objects.get(user=user_obj)
+        profile_image_url = profile.profile_picture.url
+    except Profile_picture.DoesNotExist:
+        profile_image_url = '/media/profile_pictures/default.jpg'
+
     # GitHub social login info
     try:
         social = SocialAccount.objects.get(user=user_obj)
         github_data = social.extra_data
-        avatar_url = github_data.get('avatar_url')
         github_username = github_data.get('login')
     except SocialAccount.DoesNotExist:
-        avatar_url = None
         github_username = None
 
     paginator = Paginator(user_reports_list, 5)
@@ -208,7 +214,7 @@ def user_profile(request):
 
     return render(request, 'safeCity/user.html', {
         'user_obj': user_obj,
-        'avatar_url': avatar_url,
+        'profile_image_url': profile_image_url,
         'github_username': github_username,
         'page_obj': page_obj,
         'total_reports': total_reports,
@@ -329,7 +335,22 @@ def update_report(request, report_id):
 
     return render(request, 'admin/updatereport.html', {'report': report})
 
-def update_profile(request):
-    return render(request, 'safeCity/editprofile.html')
+def update_profile(request, user_id):
+    success = False
+    user = get_object_or_404(User, id=user_id)
 
+    if request.method == 'POST':
+        user.username = request.POST.get('username', user.username)
+        user.email = request.POST.get('email', user.email)
+        user.save()
+
+        profile_image = request.FILES.get('profile_photo')
+        if profile_image:
+            profile_obj, created = Profile_picture.objects.get_or_create(user=user)
+            profile_obj.profile_picture = profile_image
+            profile_obj.save()
+
+        success = True
+
+    return render(request, 'safeCity/editprofile.html', {'user': user, 'success': success})
     
