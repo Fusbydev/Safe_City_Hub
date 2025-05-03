@@ -11,6 +11,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+     .chart-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+  </style>
 </head>
 <body>
   <div class="container-fluid p-0">
@@ -34,7 +47,7 @@
 
       <div class="stats-grid">
         <div class="stat-box">
-          <div class="stat-value">40</div>
+          <div class="stat-value total-color">40</div>
           <div class="stat-label">TOTAL REPORTS</div>
         </div>
         <div class="stat-box">
@@ -57,8 +70,9 @@
             <div class="card-title">Incident Reports Over Time</div>
           </div>
           <div class="chart-container">
-            [Line Chart Placeholder]
-          </div>
+            <!-- Canvas element for the chart -->
+            <canvas id="lineChart" width="400" height="200"></canvas>
+        </div>
           <div class="legend">
             <div class="legend-item">
               <div class="legend-color color-criminal"></div>Criminal Activity
@@ -77,11 +91,12 @@
             <div class="card-title">Incident Type Distribution</div>
           </div>
           <div class="chart-container">
-            [Pie Chart Placeholder]
+            <canvas id="pieChart" width="400" height="400"></canvas>
           </div>
         </div>
       </div>
     </div>
+    
   </div>
 
   <!-- Bootstrap JS Bundle with Popper -->
@@ -93,6 +108,130 @@
       document.getElementById('sidebar').classList.toggle('active');
       document.getElementById('mainContent').classList.toggle('shifted');
     });
+
+
+    const analyticsData = {{ analytics_data|safe }};
+        
+        // Prepare the chart labels (dates) and datasets (incident counts)
+        const labels = Object.keys(analyticsData);
+        const crimeData = labels.map(date => analyticsData[date].crime);
+        const accidentData = labels.map(date => analyticsData[date].accident);
+        const civicData = labels.map(date => analyticsData[date].civic);
+
+        // Create the line chart
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        const lineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Crime Incidents',
+                        data: crimeData,
+                        borderColor: 'rgb(220, 53, 69)',  // Color for Crime incidents
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Accident Incidents',
+                        data: accidentData,
+                        borderColor: 'rgb(253, 126, 20)',  // Color for Accident incidents
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Civic Incidents',
+                        data: civicData,
+                        borderColor: 'rgb(40, 167, 69)',  // Color for Civic incidents
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return 'Total: ' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Incident Count'
+                        }
+                    }
+                }
+            }
+        });
+
+        let totalAccident = 0;
+        let totalCivic = 0;
+        let totalCrime = 0;
+
+    // Loop through the data and sum up the incidents for each category
+    for (const date in analyticsData) {
+        if (analyticsData.hasOwnProperty(date)) {
+            totalAccident += analyticsData[date].accident;
+            totalCivic += analyticsData[date].civic;
+            totalCrime += analyticsData[date].crime;
+        }
+    }
+
+    // Log totals to verify
+    console.log('Total Accident:', totalAccident);
+    console.log('Total Civic:', totalCivic);
+    console.log('Total Crime:', totalCrime);
+
+    document.getElementsByClassName('civic-color')[0].innerHTML = totalCivic;
+    document.getElementsByClassName('accident-color')[0].innerHTML = totalAccident;
+    document.getElementsByClassName('criminal-color')[0].innerHTML = totalCrime;
+    document.getElementsByClassName('total-color')[0].innerHTML = totalAccident + totalCivic + totalCrime;
+
+    // Create the pie chart
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    const pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Accidents', 'Civic Incidents', 'Crime Incidents'],
+            datasets: [{
+                label: 'Incident Types',
+                data: [totalAccident, totalCivic, totalCrime],
+                backgroundColor: ['rgb(253, 126, 20)', 'rgb(40, 167, 69)', 'rgb(220, 53, 69)'],  // Colors for each category
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
   </script>
 </body>
 </html>

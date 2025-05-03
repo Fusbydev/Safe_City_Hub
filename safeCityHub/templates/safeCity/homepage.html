@@ -51,22 +51,41 @@
                     {{ emergency.status }}
             </p>
             </div>
-            <p class="text-muted mb-1"><strong>Date:</strong> {{ emergency.date }}</p>
-            <p class="text-muted mb-1"><strong>Address:</strong> {{ emergency.address }}</p>
-            <p class="mb-2"><strong>Description:</strong> {{ emergency.description }}</p>
+            <p class="text-muted mb-1"><i class="fa-solid fa-clock"> </i><strong> Date:</strong> {{ emergency.date }}</p>
+            <p class="text-muted mb-1"><i class="fa-solid fa-location-dot"></i><strong> Address:</strong> {{ emergency.address }}</p>
+            <p class="mb-2">{{ emergency.description }}</p>
 
-            <div class="d-flex align-items-start mb-3">
-                <div class="me-2 text-warning">
-                    <i class="fa-solid fa-lightbulb fa-lg"></i>
+            <div class="accordion mb-3" id="mitigationAccordion{{ emergency.id }}">
+                <div class="accordion-item bg-warning bg-opacity-50 rounded-4">
+                    <h2 class="accordion-header" id="mitigationHeading{{ emergency.id }}">
+                        <button class="accordion-button collapsed bg-warning bg-opacity-50 rounded-4"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#mitigationCollapse{{ emergency.id }}"
+                                aria-expanded="false"
+                                aria-controls="mitigationCollapse{{ emergency.id }}">
+                            <i class="fa-solid fa-lightbulb fa-lg me-2 text-warning"></i>
+                            <strong>Mitigation</strong>
+                        </button>
+                    </h2>
+                    <div id="mitigationCollapse{{ emergency.id }}"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="mitigationHeading{{ emergency.id }}"
+                         data-bs-parent="#mitigationAccordion{{ emergency.id }}">
+                        <div class="accordion-body">
+                            {{ emergency.ways_to_mitigate }}
+                        </div>
+                    </div>
                 </div>
-                <p class="mb-0"><strong>Mitigation:</strong> {{ emergency.ways_to_mitigate }}</p>
             </div>
+            
+            
             <!-- Comment Form -->
             <form method="post" class="d-flex">
                 {% csrf_token %}
                 <input type="hidden" name="emergency_id" value="{{ emergency.id }}">
-                <input type="text" name="comment" class="form-control me-2" placeholder="Add a comment..." required>
-                <button type="submit" class="btn btn-outline-primary btn-sm">Comment</button>
+                <input type="text" name="comment" class="form-control me-2 rounded-4" placeholder="Add a comment..." required>
+                <button type="submit" class="btn btn-primary btn-sm rounded-4">Comment</button>
             </form>
 
             <div class="mb-3">

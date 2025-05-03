@@ -545,9 +545,9 @@
     margin-right: 5px;
   }
   
-  .color-civic { background-color: #28a745; }
-  .color-criminal { background-color: #dc3545; }
-  .color-accident { background-color: #fd7e14; }
+  .color-civic { background-color: rgb(40, 167, 69); }
+  .color-criminal { background-color: rgb(220, 53, 69); }
+  .color-accident { background-color: rgb(253, 126, 20); }
   
   /* View report specific */
   .map-container {
