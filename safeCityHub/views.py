@@ -25,6 +25,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from mongoengine.errors import DoesNotExist
 from django.core.files.storage import default_storage
+from collections import defaultdict
 
 
 load_dotenv()
@@ -192,6 +193,7 @@ def user_profile(request):
     total_reports = Emergencies.objects.filter(user=user_obj.id).count()
     user_reports_list = Emergencies.objects.filter(user=user_obj.id).order_by('-submitted_at')
     on_going_count = user_reports_list.filter(status='pending').count()
+    resolved_count = user_reports_list.filter(status='resolved').count()
 
     # Use custom uploaded profile picture
     try:
@@ -218,7 +220,8 @@ def user_profile(request):
         'github_username': github_username,
         'page_obj': page_obj,
         'total_reports': total_reports,
-        'on_going_count': on_going_count
+        'on_going_count': on_going_count,
+        'resolved_count': resolved_count
     })
 def edit_report(request, pk):
     # logic to handle editing a report
@@ -260,8 +263,6 @@ def admin(request):
     return render(request, 'admin/dashboard.html', {'reports': reports, 'report_count_resolved': report_count_resolved})
     
 
-def analytics(request):
-    return render(request, 'admin/analytics.html')
 
 
 
@@ -353,4 +354,68 @@ def update_profile(request, user_id):
         success = True
 
     return render(request, 'safeCity/editprofile.html', {'user': user, 'success': success})
+
+# def line_graph_view(request):
+#     # Query all emergencies from MongoDB (adjust query as needed)
+#     emergencies = Emergencies.objects.all().order_by('date')
+
+#     # Prepare data for the graph
+#     categories = ['crime', 'accident', 'civic']
+#     labels = sorted(set(e.date.strftime('%Y-%m-%d') for e in emergencies))  # Extract unique dates
+#     data = defaultdict(list)
+
+#     # Prepare the dataset for each category
+#     for label in labels:
+#         for category in categories:
+#             category_emergencies = emergencies.filter(date__strftime='%Y-%m-%d', incident_type=category)
+#             total_value = len(category_emergencies)  # Count incidents per category per date
+#             data[category].append(total_value)
     
+#     context = {
+#         'labels': labels,
+#         'crime_data': data['crime'],
+#         'accident_data': data['accident'],
+#         'civic_data': data['civic'],
+#     }
+
+#     return render(request, 'admin/analytics.html', context)
+
+
+def analytics(request):
+    pipeline = [
+        {
+            "$project": {
+                "incident_type": 1,
+                "date": {"$dateToString": {"format": "%Y-%m-%d", "date": "$submitted_at"}}
+            }
+        },
+        {
+            "$group": {
+                "_id": {
+                    "date": "$date",
+                    "type": "$incident_type"
+                },
+                "count": {"$sum": 1}
+            }
+        },
+        {
+            "$sort": {"_id.date": 1}
+        }
+    ]
+
+    results = list(Emergencies.objects.aggregate(*pipeline))
+
+    # Organize data for template use
+    analytics_data = {}
+    for entry in results:
+        date = entry["_id"]["date"]
+        e_type = entry["_id"]["type"]
+        count = entry["count"]
+
+        if date not in analytics_data:
+            analytics_data[date] = {"accident": 0, "civic": 0, "crime": 0}
+
+        analytics_data[date][e_type] = count
+
+    # Pass data to the template
+    return render(request, 'admin/analytics.html', {"analytics_data": analytics_data})
