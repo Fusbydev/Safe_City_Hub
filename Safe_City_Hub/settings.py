@@ -116,8 +116,12 @@ mongoengine.connect(
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'safe_city',
+        'USER': 'aikawa',
+        'PASSWORD': '123',
+        'HOST': 'localhost',  # or '127.0.0.1'
+        'PORT': '5432',       # default PostgreSQL port
     }
 }
 

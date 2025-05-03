@@ -255,12 +255,15 @@ def admin(request):
     if not request.user.is_superuser:
         return redirect('home')
     
+    total_user = User.objects.all().count()
+    
+
     reports = Emergencies.objects.all()
     report_count_resolved = Emergencies.objects.filter(status='resolved').count()
-
+    report_count_pending = Emergencies.objects.filter(status='pending').count()
     
     print(report_count_resolved, "report count")
-    return render(request, 'admin/dashboard.html', {'reports': reports, 'report_count_resolved': report_count_resolved})
+    return render(request, 'admin/dashboard.html', {'reports': reports, 'report_count_resolved': report_count_resolved, 'total_user': total_user, 'report_count_pending': report_count_pending})
     
 
 

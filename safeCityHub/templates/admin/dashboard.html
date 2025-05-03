@@ -42,12 +42,12 @@
       
         <div class="stats-grid">
           <div class="stats-card active">
-            <div class="number">10</div>
+            <div class="number">{{ report_count_pending }}</div>
             <div class="label">Active Incidents</div>
           </div>
           
           <div class="stats-card pending">
-            <div class="number">5</div>
+            <div class="number">{{ report_count_pending }}</div>
             <div class="label">Pending Reports</div>
           </div>
           
@@ -57,7 +57,7 @@
           </div>
           
           <div class="stats-card users">
-            <div class="number">150</div>
+            <div class="number">{{ total_user }}</div>
             <div class="label">Registered Users</div>
           </div>
         </div>
