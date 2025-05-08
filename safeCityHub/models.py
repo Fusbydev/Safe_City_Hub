@@ -35,6 +35,7 @@ class Emergencies(Document):
     status = StringField(choices=[('pending', 'Pending'), ('resolved', 'Resolved'), ('under_review', 'Under Review')], default='pending')
     ways_to_mitigate = StringField()
     comments = ListField(EmbeddedDocumentField(Comment))
+    tags = ListField(StringField())
 
     def __str__(self):
         return self.description

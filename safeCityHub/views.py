@@ -26,7 +26,12 @@ import google.generativeai as genai
 from mongoengine.errors import DoesNotExist
 from django.core.files.storage import default_storage
 from collections import defaultdict
-
+from django.http import HttpResponse
+from pymongo import MongoClient
+from bson import ObjectId
+from gridfs import GridFS
+import json
+import re
 
 load_dotenv()
 
@@ -90,13 +95,11 @@ def submitReport(request):
     if request.method == "POST":
         GEMINI_KEY = os.getenv('GEMINI_API_KEY')
         genai.configure(api_key=GEMINI_KEY)
-        
-
 
         # Get form data
         incident_type = request.POST.get("incident-type")
         urgency_level = request.POST.get("urgency-level")
-        date_str = request.POST.get("date")  # Date as a string
+        date_str = request.POST.get("date")
         contact_number = request.POST.get("contact-number")
         description = request.POST.get("description")
         longitude = request.POST.get("longitude")
@@ -106,36 +109,55 @@ def submitReport(request):
         address = request.POST.get("location")
         status = "pending"
 
+        # Prompts for Gemini
+        prompt = (
+            f"Generate effective mitigation strategies for the incident type: "
+            f"'{incident_type} at {address}', which is described as: {description}. "
+            f"Provide a concise paragraph explaining the mitigation approach."
+        )
+        tags_prompt = (
+            f"Only return a valid JSON array of concise, lowercase tags for the incident: "
+            f"'{incident_type} at {address}', described as: {description}. "
+            f"Do not include any explanation, only return JSON like: [\"fire\", \"urgent\", \"safety\"]"
+        )
 
-        prompt = f"Genarate a ways to mitigate '{incident_type}, with a description of {description} in a small paragraph'"
+        # Gemini model
         model = genai.GenerativeModel("gemini-1.5-flash")
-
         response = model.generate_content(prompt)
+        tags_response = model.generate_content(tags_prompt)
+
+        print("Tags raw response:", tags_response.text)
+        print("Mitigation response:", response.text)
+
+        # Parse tags with regex to extract JSON array
+        try:
+            match = re.search(r"\[.*?\]", tags_response.text, re.DOTALL)
+            if match:
+                tags = json.loads(match.group(0))
+            else:
+                tags = ['sample']
+        except json.JSONDecodeError:
+            tags = ['sample']
 
         ways_to_mitigate = response.text
 
-
-        print(response.text)
-
-        # Convert date string to datetime object
+        # Convert date string to datetime
         try:
-            date = datetime.datetime.fromisoformat(date_str)  # Convert to datetime
+            date = datetime.datetime.fromisoformat(date_str)
         except ValueError:
-            # Handle invalid date format if necessary
-            date = None  # or raise an error
+            date = None
 
-        # Convert longitude and latitude to float
+        # Convert coordinates
         try:
             longitude = float(longitude)
             latitude = float(latitude)
         except ValueError:
-            # Handle invalid float if necessary
             longitude = 0.0
             latitude = 0.0
 
-        # Create a report, passing the user as an ObjectId
+        # Save to MongoDB
         report = Emergencies.objects.create(
-            user=request.user.id,  # ✅ Just use the int
+            user=request.user.id,
             incident_type=incident_type,
             urgency_level=urgency_level,
             date=date,
@@ -145,9 +167,10 @@ def submitReport(request):
             latitude=latitude,
             anonymous=anonymous,
             proof=proof,
-            address = address,
+            address=address,
             status=status,
-            ways_to_mitigate = ways_to_mitigate
+            ways_to_mitigate=ways_to_mitigate,
+            tags=tags
         )
         submitted = True
 
@@ -264,17 +287,6 @@ def admin(request):
     
     print(report_count_resolved, "report count")
     return render(request, 'admin/dashboard.html', {'reports': reports, 'report_count_resolved': report_count_resolved, 'total_user': total_user, 'report_count_pending': report_count_pending})
-    
-
-
-
-
-from django.http import HttpResponse
-from pymongo import MongoClient
-from bson import ObjectId
-from gridfs import GridFS
-
-
 
 def report_details(request, report_id):
     try:
@@ -357,33 +369,6 @@ def update_profile(request, user_id):
         success = True
 
     return render(request, 'safeCity/editprofile.html', {'user': user, 'success': success})
-
-# def line_graph_view(request):
-#     # Query all emergencies from MongoDB (adjust query as needed)
-#     emergencies = Emergencies.objects.all().order_by('date')
-
-#     # Prepare data for the graph
-#     categories = ['crime', 'accident', 'civic']
-#     labels = sorted(set(e.date.strftime('%Y-%m-%d') for e in emergencies))  # Extract unique dates
-#     data = defaultdict(list)
-
-#     # Prepare the dataset for each category
-#     for label in labels:
-#         for category in categories:
-#             category_emergencies = emergencies.filter(date__strftime='%Y-%m-%d', incident_type=category)
-#             total_value = len(category_emergencies)  # Count incidents per category per date
-#             data[category].append(total_value)
-    
-#     context = {
-#         'labels': labels,
-#         'crime_data': data['crime'],
-#         'accident_data': data['accident'],
-#         'civic_data': data['civic'],
-#     }
-
-#     return render(request, 'admin/analytics.html', context)
-
-
 def analytics(request):
     pipeline = [
         {
@@ -422,3 +407,10 @@ def analytics(request):
 
     # Pass data to the template
     return render(request, 'admin/analytics.html', {"analytics_data": analytics_data})
+
+def emergencies_by_tags(request, tag):
+    emergencies = Emergencies.objects(tags=tag)
+    return render(request, 'safeCity/emergencies_by_tags.html', {
+        'emergencies': emergencies,
+        'tag': tag
+    })

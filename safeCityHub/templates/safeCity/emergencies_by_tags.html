@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  .tag-page-container {
+    margin-top: 100px; /* Prevent nav overlap */
+  }
+</style>
+
+<div class="container tag-page-container">
+  <h2 class="mb-4">Emergencies tagged with <span class="badge bg-primary">{{ tag }}</span></h2>
+
+  {% if emergencies %}
+    <div class="list-group">
+      {% for emergency in emergencies %}
+        <a href="#" class="list-group-item list-group-item-action">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1 text-capitalize">{{ emergency.incident_type }}</h5>
+            <small class="text-muted">{{ emergency.date|date:"M d, Y H:i" }}</small>
+          </div>
+          <p class="mb-1">{{ emergency.description }}</p>
+          <small class="text-muted">Urgency: {{ emergency.urgency_level }}</small>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info" role="alert">
+      No emergencies found with this tag.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
