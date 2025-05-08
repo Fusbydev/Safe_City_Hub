@@ -51,7 +51,10 @@
                     {{ emergency.status }}
             </p>
             </div>
-            <p class="text-muted mb-1"><i class="fa-solid fa-clock"> </i><strong> Date:</strong> {{ emergency.date }}</p>
+            {% for tag in emergency.tags %}
+                <a href="{% url 'tagged_emergencies' tag %}" class="me-1 badge bg-primary text-white">{{ tag }}</a>
+            {% endfor %}
+            <p class="text-muted mb-1 mt-2"><i class="fa-solid fa-clock"> </i><strong> Date:</strong> {{ emergency.date }}</p>
             <p class="text-muted mb-1"><i class="fa-solid fa-location-dot"></i><strong> Address:</strong> {{ emergency.address }}</p>
             <p class="mb-2">{{ emergency.description }}</p>
 
@@ -90,7 +93,7 @@
 
             <div class="mb-3">
                 <h6 class="fw-semibold">Comments</h6>
-                <ul class="list-group list-group-flush">
+                <ul class="list-group list-group-flush rounded-4">
                     {% for comment in emergency.comments|slice:":3" %}
                     <li class="list-group-item px-2">
                         {{ comment.text }}
