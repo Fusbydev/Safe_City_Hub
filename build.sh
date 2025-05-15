@@ -5,6 +5,8 @@ set -e  # stop if any command fails
 echo "Installing dependencies..."
 pip install -r requirements.txt
 
+python manage.py makemigrations
+
 echo "Running migrations..."
 python manage.py migrate
 
