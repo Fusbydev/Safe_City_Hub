@@ -14,6 +14,7 @@ from pathlib import Path
 import mongoengine
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -116,12 +117,7 @@ mongoengine.connect(
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'safe_city',
-        'USER': 'postgres',  # or your PostgreSQL username
-        'PASSWORD': '123',
-        'HOST': 'localhost',  # or '127.0.0.1'
-        'PORT': '5432',       # default PostgreSQL port
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'), conn_max_age=600),
     }
 }
 
