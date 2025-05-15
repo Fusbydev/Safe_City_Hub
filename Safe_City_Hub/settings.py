@@ -180,3 +180,10 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = 'login'
 ACCOUNT_LOGOUT_ON_GET = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'laravielsuite@gmail.com'
+EMAIL_HOST_PASSWORD = 'jlff tigg ykta ukfo'

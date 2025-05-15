@@ -32,6 +32,7 @@ from bson import ObjectId
 from gridfs import GridFS
 import json
 import re
+from django.core.mail import send_mail
 
 load_dotenv()
 
@@ -347,6 +348,20 @@ def update_report(request, report_id):
         if new_status:
             report.status = new_status
             report.save()
+
+            if new_status == 'resolved':
+                try:
+                    user = User.objects.get(id=report.user)
+                    send_mail(
+                        subject="Your emergency report has been resolved",
+                        message="Hello,\n\nYour emergency report has been marked as resolved. Thank you for using our platform.\n\nBest regards,\nSafeCity Support Team",
+                        from_email="noreply@safecityhub.com",
+                        recipient_list=[user.email],
+                        fail_silently=False
+                    )
+                except User.DoesNotExist:
+                    print("User does not exist")
+
             return HttpResponseRedirect(reverse('view_report', args=[str(report.id)]))
 
     return render(request, 'admin/updatereport.html', {'report': report})
