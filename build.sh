@@ -12,3 +12,5 @@ python manage.py migrate
 
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
+
+python manage.py loaddata data.json
