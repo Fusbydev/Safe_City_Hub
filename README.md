@@ -31,6 +31,8 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
+Note: Make sure to make .env file level of manage.py and include the MONGO_URI and GEMINI_API_KEY
+
 ## 📦 4. Install dependencies
 ```
 pip install -r requirements.txt
