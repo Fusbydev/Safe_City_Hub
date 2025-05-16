@@ -18,8 +18,9 @@ cd Safe_City_Hub
 ```
 
 ## 🧪 2. Create a virtual environment
+note: make sure you have python 3.10 version of python to prevent version conflict
 ```
-python -m venv venv
+py -3.10 -m venv venv
 ```
 ## ⚙️ 3. Activate the virtual environment (for Windows)
 ```
